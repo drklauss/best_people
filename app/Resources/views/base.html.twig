@@ -2,12 +2,16 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Best People TOP-10!{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
+    <script data-main="/public/app/main" src="/public/vendor/requirejs/require.js"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
 <body>
-{% block body %}{% endblock %}
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
 {% block javascripts %}{% endblock %}
+
 </body>
 </html>

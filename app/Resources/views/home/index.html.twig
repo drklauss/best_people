@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="page-header">
+                <h2>Лучшие люди интернета</h2>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            {{ render( controller( 'AppBundle:Base:renderAuthRegisterBlock' )) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            {{ render( controller( 'AppBundle:TopUsers:showTopUsersList' )) }}
+        </div>
+        <div class="col-sm-6"></div>
+    </div>
+{% endblock %}
