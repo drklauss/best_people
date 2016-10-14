@@ -21,7 +21,7 @@ requirejs.config({
         swal: "vendor/sweetalert2/dist/sweetalert2.min"
     },
     baseUrl: common_path,
-    urlArgs: 'v=0.1'
+    urlArgs: 'v=0.12'
 });
 
 requirejs(['app/common/script'], function (common) {
@@ -31,4 +31,8 @@ requirejs(['app/common/script'], function (common) {
     common.loadCss(css_list.font_awesome);
 });
 
-
+if(register_page !== undefined) {
+    requirejs(['app/pages/register/main'], function (main) {
+        main.init();
+    });
+}
