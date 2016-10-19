@@ -6,6 +6,7 @@
     {% block stylesheets %}{% endblock %}
     <script data-main="/public/app/main" src="/public/vendor/requirejs/require.js"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    {% block additions %}{% endblock %}
 </head>
 <body>
 <div class="container">

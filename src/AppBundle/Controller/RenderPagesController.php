@@ -20,9 +20,10 @@ class RenderPagesController extends Controller
 
     /**
      * Render authRegisterBlock block
+     * @param $page
      * @return Response
      */
-    public function renderAuthRegisterBlockAction()
+    public function renderAuthRegisterBlockAction($page)
     {
         $user = array(
             'name' => 'Alexey',
@@ -32,7 +33,8 @@ class RenderPagesController extends Controller
         // replace this example code with whatever you need
         return $this->render('AppBundle:Auth:authRegisterBlock.html.twig', array(
             'registered' => true,
-            'user' => $user
+            'user' => $user,
+            'page' => $page
         ));
     }
 
@@ -41,6 +43,16 @@ class RenderPagesController extends Controller
      */
     public function renderRegisterPageAction()
     {
+        // todo if user is authorized -> offer him to logout first
         return $this->render('register.html.twig');
+    }
+
+    /**
+     * @Route("/login", name="loginpage")
+     */
+    public function renderLoginPageAction()
+    {
+        // todo if user is authorized -> offer him to logout first
+        return $this->render('login.html.twig');
     }
 }

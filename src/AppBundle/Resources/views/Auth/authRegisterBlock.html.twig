@@ -1,26 +1,49 @@
-{% if not registered %}
-    <div class="list-group">
-        <a href="/lk" class="list-group-item">
-            <i class="fa fa-user fa-fw"></i> Привет, {{ user.name }}
-            <span class="badge">{{ user.carma }}</span>
-        </a>
+{% if page == 'home' %}
+    {% if not registered %}
+        <div class="list-group">
+            <a href="/lk" class="list-group-item">
+                <i class="fa fa-user fa-fw"></i> Привет, {{ user.name }}
+                <span class="badge">{{ user.carma }}</span>
+            </a>
 
-        <a href="/logout" class="list-group-item list-group-item-danger">
-            <i class="fa fa-sign-out" aria-hidden="true"></i>
-            Sign out
-        </a>
-    </div>
+            <a href="/logout" class="list-group-item list-group-item-danger">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                Sign out
+            </a>
+        </div>
 
-{% else %}
-    <div class="list-group">
-        <a href="/login" class="list-group-item">
-            <i class="fa fa-user fa-fw"></i>
-            Log in
-        </a>
+    {% else %}
+        <div class="list-group">
+            <a href="/login" class="list-group-item">
+                <i class="fa fa-user fa-fw"></i>
+                Log in
+            </a>
 
-        <a href="/register" class="list-group-item list-group-item-info">
-            <i class="fa fa-sign-out" aria-hidden="true"></i>
-            Register
-        </a>
-    </div>
-{% endif %}
+            <a href="/register" class="list-group-item list-group-item-info">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                Register
+            </a>
+        </div>
+    {% endif %}
+ {% elseif page == 'register' %}
+     <div class="list-group">
+         <a href="/" class="list-group-item">
+             <i class="fa fa-home" aria-hidden="true"></i> Back to Home
+         </a>
+         <a href="/login" class="list-group-item list-group-item-info">
+             <i class="fa fa-user fa-fw"></i>
+             Log in
+         </a>
+     </div>
+{% elseif page == 'login' %}
+     <div class="list-group">
+         <a href="/" class="list-group-item">
+             <i class="fa fa-home" aria-hidden="true"></i> Back to Home
+         </a>
+         <a href="/register" class="list-group-item list-group-item-info">
+             <i class="fa fa-sign-in" aria-hidden="true"></i>
+             Register
+         </a>
+     </div>
+ {% endif %}
+

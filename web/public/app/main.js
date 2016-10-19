@@ -31,7 +31,7 @@ requirejs(['app/common/script'], function (common) {
     common.loadCss(css_list.font_awesome);
 });
 
-if(register_page !== undefined) {
+if(typeof(register_page) !== 'undefined') {
     requirejs(['app/pages/register/main'], function (main) {
         main.init();
     });
