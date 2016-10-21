@@ -1,34 +1,88 @@
-define(['jquery', 'bootstrap'], function () {
+define(['jquery', 'swal'], function () {
+    var formIsValid = true;
     var main = {
         init: function () {
+
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover"}
             );
-            $('#js_disclose_password').click(function () {
+            $('#jsDisclosePassword').click(function () {
                 if ($(this).prop('checked')) {
-                    $('#js_password_input').attr('type', 'text')
+                    $('#jsPasswordInput').attr('type', 'text')
                 } else {
-                    $('#js_password_input').attr('type', 'password')
+                    $('#jsPasswordInput').attr('type', 'password')
                 }
             });
             // imitate clicking on file button
-            $('#js_file_input_trigger').on('click touchstart', function (event) {
+            $('#jsFileInputTrigger').on('click touchstart', function (event) {
                 event.preventDefault();
-                $('#js_file_input').click();
+                $('#jsFileInput').click();
             });
             // write filename after file select
-            $('#js_file_input').on('change', function(){
+            $('#jsFileInput').on('change', function(){
                 var filename = $(this).val().split('\\').pop();
-                $('#js_filename_area').val(filename);
+                $('#jsFileNameArea').val(filename);
             });
             // need to imitate selector
-            $('#js_gender_select').on('click touchstart', 'button',function(event){
+            $('#jsGenderSelect').on('click touchstart', 'button',function(event){
                 event.preventDefault();
-                $('#js_gender_select').find('button').removeClass('active');
+                $('#jsGenderSelect').find('button').removeClass('active');
                 $(this).addClass('active');
+                $('#jsGenderInput').val($(this).text());
             })
+        },
+        /**
+         * Send Form
+         */
+        sendForm : function() {
+            $('#jsRegisterBtn').click(function (event) {
+                event.preventDefault();
+                var $form = $('#jsRegisterForm');
+                main.validateForm($form);
+                console.log('form:', formIsValid);
+                if (formIsValid) {
+                    $('#jsRegisterBtn').attr('disabled', true);
+                    var formData = new FormData($form[0]);
+                    $.ajax({
+                        url: '/register/user',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(result) {
+                            $('#jsRegisterBtn').attr('disabled', false);
+                            //console.log(result);
+                        },
+                        error: function (result) {
+                            // console.log(result);
+                        }
+
+                    });
+                } else {
+                    swal({
+                        title: 'Oohhh...',
+                        text: 'Check and fill all inputs please!',
+                        type: 'error'
+                    })
+                }
+            });
+        },
+        validateForm : function($form) {
+            var passwordIsValid = true;
+            var genderIsValid = false;
+            $form.find('input:required').each(function() {
+                if(!$(this).val().length){
+                    passwordIsValid = false;
+                }
+            });
+            $('#jsGenderSelect').find('button').each(function() {
+                if($(this).hasClass('active')) {
+                    genderIsValid = true;
+                }
+            });
+            formIsValid = genderIsValid && passwordIsValid;
         }
 
-    }
+    };
     return main;
 });

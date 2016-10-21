@@ -12,15 +12,15 @@ define(['jquery', 'bootstrap'], function () {
         /**
          * loadCss files
          * @method loadCss
-         * @param  {string} css_str path
+         * @param  {string} cssStr path
          */
-        loadCss: function (css_str) {
-            if (css_loaded.indexOf(css_str) == -1) {
+        loadCss: function (cssStr) {
+            if (cssLoaded.indexOf(cssStr) == -1) {
                 var link = document.createElement("link");
-                css_loaded.push(css_str);
+                cssLoaded.push(cssStr);
                 link.type = "text/css";
                 link.rel = "stylesheet";
-                link.href = css_str;
+                link.href = cssStr;
                 document.getElementsByTagName("head")[0].appendChild(link);
             }
         }

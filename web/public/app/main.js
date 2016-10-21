@@ -1,12 +1,13 @@
-var common_path = "/public/";
+var commonPath = "/public/";
 // list of used css files
-var css_list = {
-    bootstrap: common_path + "vendor/bootstrap/dist/css/bootstrap.min.css",
-    screen: common_path + "assets/stylesheets/screen.css",
-    font_awesome: common_path + "vendor/font-awesome/css/font-awesome.min.css"
+var cssList = {
+    bootstrap: commonPath + "vendor/bootstrap/dist/css/bootstrap.min.css",
+    screen: commonPath + "assets/stylesheets/screen.css",
+    fontAwesome: commonPath + "vendor/font-awesome/css/font-awesome.min.css",
+    swal: commonPath + "vendor/sweetalert2/dist/sweetalert2.min.css"
 };
 // need to prevent duplicate css files
-var css_loaded = [];
+var cssLoaded = [];
 
 requirejs.config({
     waitSeconds: 15,
@@ -20,19 +21,29 @@ requirejs.config({
         bootstrap: "vendor/bootstrap/dist/js/bootstrap.min",
         swal: "vendor/sweetalert2/dist/sweetalert2.min"
     },
-    baseUrl: common_path,
+    baseUrl: commonPath,
     urlArgs: 'v=0.12'
 });
 
-requirejs(['app/common/script'], function (common) {
-    common.init();
-    common.loadCss(css_list.screen);
-    common.loadCss(css_list.bootstrap);
-    common.loadCss(css_list.font_awesome);
-});
+requirejs([
+        'app/common/script'
+    ], function (common) {
+        common.init();
+        common.loadCss(cssList.screen);
+        common.loadCss(cssList.bootstrap);
+        common.loadCss(cssList.fontAwesome);
+    }
+);
 
-if(typeof(register_page) !== 'undefined') {
-    requirejs(['app/pages/register/main'], function (main) {
-        main.init();
-    });
+if (typeof(registerPage) !== 'undefined') {
+    requirejs([
+        'app/pages/register/main',
+        'app/common/script'
+    ], function (main, common) {
+
+            main.init();
+            main.sendForm();
+            common.loadCss(cssList.swal);
+        }
+    );
 }
