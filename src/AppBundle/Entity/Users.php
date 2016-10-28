@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 /**
  * Users
@@ -25,6 +27,11 @@ class Users
      * @var string
      *
      * @ORM\Column(name="nickname", type="string", length=50)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *   min = 3,
+     *   max = 50
+     * )
      */
 
     private $nickname;
@@ -33,20 +40,30 @@ class Users
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=50)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *   min = 4,
+     *   max = 50
+     * )
+     * @Assert\Regex(
+     *    pattern="/(\d+[a-z]+|[a-z]+\d+)/i",
+     *    message="Password must contain letters (a-z) and digits(0-9)"
+     * )
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="boolean")
+     * @ORM\Column(name="isFemale", type="boolean")
+     * * @Assert\NotBlank
      */
-    private $gender;
+    private $isFemale;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="avatar_link", type="string", length=255)
+     * @ORM\Column(name="avatar_link", type="string", length=255, nullable=true)
      */
     private $avatarLink;
 
@@ -118,28 +135,6 @@ class Users
         return $this->password;
     }
 
-    /**
-     * Set gender
-     *
-     * @param boolean $gender
-     * @return Users
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * Get gender
-     *
-     * @return boolean
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
 
     /**
      * Set avatarLink
@@ -237,5 +232,28 @@ class Users
     public function getToUserVotes()
     {
         return $this->toUserVotes;
+    }
+
+    /**
+     * Set isFemale
+     *
+     * @param boolean $isFemale
+     * @return Users
+     */
+    public function setIsFemale($isFemale)
+    {
+        $this->isFemale = $isFemale;
+
+        return $this;
+    }
+
+    /**
+     * Get isFemale
+     *
+     * @return boolean 
+     */
+    public function getIsFemale()
+    {
+        return $this->isFemale;
     }
 }

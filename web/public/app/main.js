@@ -1,10 +1,10 @@
 var commonPath = "/public/";
 // list of used css files
 var cssList = {
-    bootstrap: commonPath + "vendor/bootstrap/dist/css/bootstrap.min.css",
+    bootstrap: commonPath + "vendor/bootstrap/css/bootstrap.min.css",
     screen: commonPath + "assets/stylesheets/screen.css",
     fontAwesome: commonPath + "vendor/font-awesome/css/font-awesome.min.css",
-    swal: commonPath + "vendor/sweetalert2/dist/sweetalert2.min.css"
+    swal: commonPath + "vendor/sweetalert/sweetalert.css"
 };
 // need to prevent duplicate css files
 var cssLoaded = [];
@@ -17,9 +17,9 @@ requirejs.config({
         }
     },
     paths: {
-        jquery: "vendor/jquery/dist/jquery.min",
-        bootstrap: "vendor/bootstrap/dist/js/bootstrap.min",
-        swal: "vendor/sweetalert2/dist/sweetalert2.min"
+        jquery: "vendor/jquery/jquery.min",
+        bootstrap: "vendor/bootstrap/js/bootstrap.min",
+        swal: "vendor/sweetalert/sweetalert.min"
     },
     baseUrl: commonPath,
     urlArgs: 'v=0.12'

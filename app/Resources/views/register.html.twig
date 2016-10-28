@@ -14,16 +14,8 @@
                     <h2 class="text-center">Register new user</h2>
                 </div>
                 <div class="panel-body">
-                    <div id="js_register_form_errors" class="alert alert-danger" role="alert">
-                        <ul>
-                            <li>
-                                Password should contain 1 number
-                            </li>
-                            <li>
-                                Enter good nickname
-                            </li>
-                        </ul>
-
+                    <div id="js_register_form_errors" class="alert alert-danger hidden" role="alert">
+                        <ul></ul>
                     </div>
                     <form id="jsRegisterForm">
                         <div class="form-group">
@@ -32,7 +24,7 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" id="jsNameInput" name="name" class="form-control"
+                                <input type="text" id="jsNameInput" name="nickname" class="form-control"
                                        placeholder="ex. Ivan" aria-describedby="username" required>
                             </div>
                         </div>
@@ -65,7 +57,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Select gender</label>
+                            <label>Select gender*</label>
                             <div class="input-group">
                                 <div class="row">
                                     <div class="col-sm-3">
@@ -75,7 +67,7 @@
                                         <div class="input-group-btn" id="jsGenderSelect">
                                             <button class="btn btn-default">Male</button>
                                             <button class="btn btn-default">Female</button>
-                                            <input id="jsGenderInput" type="text" name="gender" hidden>
+                                            <input id="jsGenderInput" type="text" name="isFemale" hidden>
 
                                         </div>
                                     </div>
