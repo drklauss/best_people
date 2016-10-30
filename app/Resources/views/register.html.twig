@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+{% block additions %}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
 
 {% block body %}
     <div class="row">
@@ -65,17 +68,21 @@
                                             <i class="fa fa-venus-mars" aria-hidden="true"></i>
                                         </span>
                                         <div class="input-group-btn" id="jsGenderSelect">
+                                            <input id="jsGenderInput" type="text" name="isFemale" hidden>
                                             <button class="btn btn-default">Male</button>
                                             <button class="btn btn-default">Female</button>
-                                            <input id="jsGenderInput" type="text" name="isFemale" hidden>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4 col-sm-offset-8 pull-right">
+                            <div class="col-sm-4 col-md-4">
+                                <div class="g-recaptcha" data-sitekey="6LfOtQkUAAAAAJI7XxTYC01iwoQNkxKZ6GA8qRXr"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-4 pull-right">
                                 <button type="submit" id="jsRegisterBtn" class="btn btn-primary">Register</button>
                             </div>
                         </div>

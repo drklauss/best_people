@@ -15,7 +15,7 @@ class BaseController extends Controller
      * Google captcha
      * @var string
      */
-    private $_captcha;
+    protected $_captcha;
 
     /**
      * List of errors
@@ -64,7 +64,7 @@ class BaseController extends Controller
     protected function isGoodCaptcha($captcha)
     {
         $params = array(
-            'secret' => '6LfywCITAAAAAJ9ljh-fGwCWQQlbgiO2avlCe05S',
+            'secret' => '6LfOtQkUAAAAAEZnATcL509IQlmDDkiujuwTbLMI',
             'response' => $captcha,
             'remoteip' => $_SERVER["REMOTE_ADDR"]
         );
