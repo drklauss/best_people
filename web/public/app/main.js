@@ -40,7 +40,17 @@ if (typeof(registerPage) !== 'undefined') {
         'app/pages/register/main',
         'app/common/script'
     ], function (main, common) {
-
+            main.init();
+            main.sendForm();
+            common.loadCss(cssList.swal);
+        }
+    );
+}
+if (typeof(loginPage) !== 'undefined') {
+    requirejs([
+        'app/pages/login/main',
+        'app/common/script'
+    ], function (main, common) {
             main.init();
             main.sendForm();
             common.loadCss(cssList.swal);

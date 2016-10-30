@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends Controller
 {
+    const SALT = 'bestPeople';
+
     /**
      * Google captcha
      * @var string
@@ -28,6 +30,17 @@ class BaseController extends Controller
     {
         $this->_errors['isError'] = false;
     }
+
+    /**
+     * Get salt password
+     * @param $password
+     * @return string $password
+     */
+    protected function saltPassword($password)
+    {
+        return md5(self::SALT . $password . $password);
+    }
+
     /**
      * Add error
      * @param $error

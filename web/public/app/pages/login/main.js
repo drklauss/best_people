@@ -1,6 +1,6 @@
 define(['jquery', 'swal'], function () {
     var formIsValid = true;
-    var $errorsBlock = $('#js_register_form_errors');
+    var $errorsBlock = $('#jsLoginFormErrors');
     var waitTime = 2000;
     var main = {
         init: function () {
@@ -15,56 +15,34 @@ define(['jquery', 'swal'], function () {
                     $('#jsPasswordInput').attr('type', 'password')
                 }
             });
-            // imitate clicking on file button
-            $('#jsFileInputTrigger').on('click touchstart', function (event) {
-                event.preventDefault();
-                $('#jsFileInput').click();
-            });
-            // write filename after file select
-            $('#jsFileInput').on('change', function () {
-                var filename = $(this).val().split('\\').pop();
-                $('#jsFileNameArea').val(filename);
-            });
-            // need to imitate selector
-            $('#jsGenderSelect').on('click touchstart', 'button', function (event) {
-                event.preventDefault();
-                $('#jsGenderSelect').find('button').removeClass('active');
-                $(this).addClass('active');
-                var isFemale = ($(this).text() === 'Female');
-                $('#jsGenderInput').val(Boolean(isFemale));
-            })
         },
         /**
          * Send Form
          */
         sendForm: function () {
-            $('#jsRegisterBtn').click(function (event) {
+            $('#jsLoginBtn').click(function (event) {
                 event.preventDefault();
                 main.removeFormErrors();
-                var $form = $('#jsRegisterForm');
+                var $form = $('#jsLoginForm');
                 main.validateForm($form);
                 if (formIsValid) {
-                    $('#jsRegisterBtn').attr('disabled', true);
-                    var formData = new FormData($form[0]);
+                    $('#jsLoginBtn').attr('disabled', true);
                     $.ajax({
-                        url: '/register/user',
+                        url: '/login/user',
                         method: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+                        data: $form.serialize(),
                         success: function (result) {
-                            $('#jsRegisterBtn').attr('disabled', false);
+                            $('#jsLoginBtn').attr('disabled', false);
                             if (result['isError'] == false) {
                                 swal({
-                                    title: 'Account created!',
+                                    title: 'Successfully login!',
                                     text: 'Now you will be redirected to login form',
                                     type: 'success',
-                                    showConfirmButton: true,
-                                    confirmButtonText: "Yes, redirect me!",
-                                    confirmButtonColor: "#2e6da4"
-                                }, function () {
-                                    location.href = '/login'
+                                    timer: waitTime
                                 });
+                                setTimeout(function(){
+                                    location.href = '/';
+                                }, waitTime);
                             } else {
                                 main.addFormErrors(result['errors']);
                                 swal({
@@ -96,18 +74,12 @@ define(['jquery', 'swal'], function () {
          */
         validateForm: function ($form) {
             var inputsAreValid = true;
-            var genderIsValid = false;
             $form.find('input:required').each(function () {
                 if (!$(this).val().length) {
                     inputsAreValid = false;
                 }
             });
-            $('#jsGenderSelect').find('button').each(function () {
-                if ($(this).hasClass('active')) {
-                    genderIsValid = true;
-                }
-            });
-            formIsValid = genderIsValid && inputsAreValid;
+            formIsValid = inputsAreValid;
         },
 
         /**

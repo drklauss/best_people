@@ -17,12 +17,8 @@
                     <h2 class="text-center">Login</h2>
                 </div>
                 <div class="panel-body">
-                    <div id="jsRegisterFormErrors" class="alert alert-danger" role="alert">
-                        <ul>
-                            <li>
-                                Wrong password or nickname
-                            </li>
-                        </ul>
+                    <div id="jsLoginFormErrors" class="alert alert-danger hidden" role="alert">
+                        <ul></ul>
                     </div>
                     <form id="jsLoginForm">
                         <div class="form-group">
@@ -31,7 +27,7 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" id="jsNameInput" class="form-control" minlength="4"
+                                <input name="nickname" type="text" id="jsNameInput" class="form-control"
                                        placeholder="ex. Ivan" aria-describedby="username" required>
                             </div>
                         </div>
@@ -41,7 +37,7 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-key" aria-hidden="true"></i>
                                 </span>
-                                <input type="password" id="jsPasswordInput" class="form-control" minlength="5"
+                                <input name="password" type="password" id="jsPasswordInput" class="form-control" minlength="5"
                                        placeholder="ex. ivan1" aria-describedby="password" required>
                                 <span class="input-group-addon">
                                     <input id="jsDisclosePassword" type="checkbox" data-toggle="tooltip" data-placement="top"
@@ -68,7 +64,7 @@
     </div>
     {% verbatim %}
         <script >
-            var login_page = true;
+            var loginPage = true;
         </script>
     {% endverbatim %}
 {% endblock %}

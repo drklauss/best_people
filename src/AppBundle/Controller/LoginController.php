@@ -9,19 +9,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 
-class RegisterController extends BaseController
+class LoginController extends BaseController
 {
 
     /**
-     * @Route("/register/user")
+     * @Route("/login/user")
      */
-    public function registerUser()
+    public function loginUser()
     {
         $user = $this->createFromRequest();
-        if ($this->validateUser($user)) {
-            // saves user
-            $user->setPassword($this->saltPassword($user->getPassword()));
-            $this->save($user);
+        if ($this->loginTry($user)) {
+            // start user session
+
         };
         return $this->getErrorsJsonResult();
     }
@@ -38,42 +37,33 @@ class RegisterController extends BaseController
         $user->setNickname($post->get('nickname'));
         $user->setPassword($post->get('password'));
         $this->_captcha = $post->get('g-recaptcha-response');
-        $isFemale = $post->get('isFemale') ? 1 : 0;
-        $user->setIsFemale($isFemale);
         return $user;
-
     }
 
     /**
-     * Validate a user
-     * @param object $user user
+     * Try to login a user
+     * @param object $user User
      * @return bool
      */
-    protected function validateUser($user)
+    protected function loginTry($user)
     {
-        $validator = $this->get('validator');
-        /**
-         * @var ConstraintViolationList $validateErrors
-         */
-        $validateErrors = $validator->validate($user);
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $isBadCaptcha = !$this->isGoodCaptcha($this->_captcha);
         $userExist = $usersRepository->findOneBy(
-            array('nickname' => $user->getNickname())
+            array(
+                'nickname' => $user->getNickname(),
+                'password' => $this->saltPassword($user->getPassword())
+            )
         );
-        if ($userExist) {
-            $this->addError('This user already exist. Try another nickname!');
+        if (!$userExist) {
+            $this->addError('Wrong nickname or password');
         }
         if ($isBadCaptcha) {
             $this->addError('Oooh, seems your captcha wrong, are you a robot?');
         }
-        foreach ($validateErrors as $error) {
-            $this->addError($error->getMessage());
-        }
 
-        $isError = (count($validateErrors) > 0) || $userExist || $isBadCaptcha;
+        $isError = !$userExist || $isBadCaptcha;
         return !$isError;
     }
-
 
 }
