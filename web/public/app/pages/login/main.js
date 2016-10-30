@@ -36,7 +36,7 @@ define(['jquery', 'swal'], function () {
                             if (result['isError'] == false) {
                                 swal({
                                     title: 'Successfully login!',
-                                    text: 'Now you will be redirected to login form',
+                                    text: 'Now you will be redirected to main page',
                                     type: 'success',
                                     timer: waitTime
                                 });
