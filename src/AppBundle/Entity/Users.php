@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Users
@@ -68,21 +69,29 @@ class Users
     private $avatarLink;
 
     /**
-     * @ORM\OneToMany(targetEntity="Messages", mappedBy="to_user_id")
+     * @ORM\OneToMany(targetEntity="Votes", mappedBy="toUserId")
      */
 
-    private $toUserMessages;
+    private $votes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Votes", mappedBy="to_user_id")
+     * @ORM\OneToMany(targetEntity="Messages", mappedBy="toUserId")
      */
 
-    private $toUserVotes;
+    private $messages;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -105,7 +114,7 @@ class Users
     /**
      * Get nickname
      *
-     * @return string
+     * @return string 
      */
     public function getNickname()
     {
@@ -128,110 +137,11 @@ class Users
     /**
      * Get password
      *
-     * @return string
+     * @return string 
      */
     public function getPassword()
     {
         return $this->password;
-    }
-
-
-    /**
-     * Set avatarLink
-     *
-     * @param string $avatarLink
-     * @return Users
-     */
-    public function setAvatarLink($avatarLink)
-    {
-        $this->avatarLink = $avatarLink;
-
-        return $this;
-    }
-
-    /**
-     * Get avatarLink
-     *
-     * @return string
-     */
-    public function getAvatarLink()
-    {
-        return $this->avatarLink;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->toUserMessages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->toUserVotes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add toUserMessages
-     *
-     * @param \AppBundle\Entity\Messages $toUserMessages
-     * @return Users
-     */
-    public function addToUserMessage(\AppBundle\Entity\Messages $toUserMessages)
-    {
-        $this->toUserMessages[] = $toUserMessages;
-
-        return $this;
-    }
-
-    /**
-     * Remove toUserMessages
-     *
-     * @param \AppBundle\Entity\Messages $toUserMessages
-     */
-    public function removeToUserMessage(\AppBundle\Entity\Messages $toUserMessages)
-    {
-        $this->toUserMessages->removeElement($toUserMessages);
-    }
-
-    /**
-     * Get toUserMessages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getToUserMessages()
-    {
-        return $this->toUserMessages;
-    }
-
-    /**
-     * Add toUserVotes
-     *
-     * @param \AppBundle\Entity\Votes $toUserVotes
-     * @return Users
-     */
-    public function addToUserVote(\AppBundle\Entity\Votes $toUserVotes)
-    {
-        $this->toUserVotes[] = $toUserVotes;
-
-        return $this;
-    }
-
-    /**
-     * Remove toUserVotes
-     *
-     * @param \AppBundle\Entity\Votes $toUserVotes
-     */
-    public function removeToUserVote(\AppBundle\Entity\Votes $toUserVotes)
-    {
-        $this->toUserVotes->removeElement($toUserVotes);
-    }
-
-    /**
-     * Get toUserVotes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getToUserVotes()
-    {
-        return $this->toUserVotes;
     }
 
     /**
@@ -255,5 +165,94 @@ class Users
     public function getIsFemale()
     {
         return $this->isFemale;
+    }
+
+    /**
+     * Set avatarLink
+     *
+     * @param string $avatarLink
+     * @return Users
+     */
+    public function setAvatarLink($avatarLink)
+    {
+        $this->avatarLink = $avatarLink;
+
+        return $this;
+    }
+
+    /**
+     * Get avatarLink
+     *
+     * @return string 
+     */
+    public function getAvatarLink()
+    {
+        return $this->avatarLink;
+    }
+
+    /**
+     * Add votes
+     *
+     * @param \AppBundle\Entity\Votes $votes
+     * @return Users
+     */
+    public function addVote(\AppBundle\Entity\Votes $votes)
+    {
+        $this->votes[] = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \AppBundle\Entity\Votes $votes
+     */
+    public function removeVote(\AppBundle\Entity\Votes $votes)
+    {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * Add messages
+     *
+     * @param \AppBundle\Entity\Messages $messages
+     * @return Users
+     */
+    public function addMessage(\AppBundle\Entity\Messages $messages)
+    {
+        $this->messages[] = $messages;
+
+        return $this;
+    }
+
+    /**
+     * Remove messages
+     *
+     * @param \AppBundle\Entity\Messages $messages
+     */
+    public function removeMessage(\AppBundle\Entity\Messages $messages)
+    {
+        $this->messages->removeElement($messages);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

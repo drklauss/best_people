@@ -2,12 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Doctrine\ORM\Mapping\Entity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+
 
 class BaseController extends Controller
 {
@@ -19,7 +17,7 @@ class BaseController extends Controller
      */
     protected $_captcha;
 
-    /**
+     /**
      * List of errors
      * @var array
      */

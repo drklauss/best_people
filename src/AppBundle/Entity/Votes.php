@@ -12,23 +12,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Votes
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="id")
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
      * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
      */
     private $fromUserId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="id")
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
      * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      */
     private $toUserId;
@@ -52,62 +48,7 @@ class Votes
      * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
      */
     private $voteFromUser;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set fromUserId
-     *
-     * @param integer $fromUserId
-     * @return Votes
-     */
-    public function setFromUserId($fromUserId)
-    {
-        $this->fromUserId = $fromUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get fromUserId
-     *
-     * @return integer
-     */
-    public function getFromUserId()
-    {
-        return $this->fromUserId;
-    }
-
-    /**
-     * Set toUserId
-     *
-     * @param integer $toUserId
-     * @return Votes
-     */
-    public function setToUserId($toUserId)
-    {
-        $this->toUserId = $toUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get toUserId
-     *
-     * @return integer
-     */
-    public function getToUserId()
-    {
-        return $this->toUserId;
-    }
+    
 
     /**
      * Set isGoodVote
@@ -125,7 +66,7 @@ class Votes
     /**
      * Get isGoodVote
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getIsGoodVote()
     {
@@ -148,7 +89,7 @@ class Votes
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getDate()
     {
@@ -156,18 +97,50 @@ class Votes
     }
 
     /**
-     * Set user
+     * Set fromUserId
      *
-     * @param \AppBundle\Entity\Users $user
+     * @param \AppBundle\Entity\Users $fromUserId
      * @return Votes
      */
-    public function setUser(\AppBundle\Entity\Users $user = null)
+    public function setFromUserId(\AppBundle\Entity\Users $fromUserId)
     {
-        $this->user = $user;
+        $this->fromUserId = $fromUserId;
 
         return $this;
     }
 
+    /**
+     * Get fromUserId
+     *
+     * @return \AppBundle\Entity\Users 
+     */
+    public function getFromUserId()
+    {
+        return $this->fromUserId;
+    }
+
+    /**
+     * Set toUserId
+     *
+     * @param \AppBundle\Entity\Users $toUserId
+     * @return Votes
+     */
+    public function setToUserId(\AppBundle\Entity\Users $toUserId)
+    {
+        $this->toUserId = $toUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get toUserId
+     *
+     * @return \AppBundle\Entity\Users 
+     */
+    public function getToUserId()
+    {
+        return $this->toUserId;
+    }
 
     /**
      * Set voteFromUser
@@ -185,7 +158,7 @@ class Votes
     /**
      * Get voteFromUser
      *
-     * @return \AppBundle\Entity\Users
+     * @return \AppBundle\Entity\Users 
      */
     public function getVoteFromUser()
     {

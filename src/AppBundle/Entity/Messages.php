@@ -22,13 +22,13 @@ class Messages
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
      * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
      */
     private $fromUserId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
      * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      */
     private $toUserId;
@@ -53,60 +53,15 @@ class Messages
      */
     private $messageFromUser;
 
+
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fromUserId
-     *
-     * @param integer $fromUserId
-     * @return Messages
-     */
-    public function setFromUserId($fromUserId)
-    {
-        $this->fromUserId = $fromUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get fromUserId
-     *
-     * @return integer
-     */
-    public function getFromUserId()
-    {
-        return $this->fromUserId;
-    }
-
-    /**
-     * Set toUserId
-     *
-     * @param integer $toUserId
-     * @return Messages
-     */
-    public function setToUserId($toUserId)
-    {
-        $this->toUserId = $toUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get toUserId
-     *
-     * @return integer
-     */
-    public function getToUserId()
-    {
-        return $this->toUserId;
     }
 
     /**
@@ -125,7 +80,7 @@ class Messages
     /**
      * Get body
      *
-     * @return string
+     * @return string 
      */
     public function getBody()
     {
@@ -148,11 +103,57 @@ class Messages
     /**
      * Get date
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set fromUserId
+     *
+     * @param \AppBundle\Entity\Users $fromUserId
+     * @return Messages
+     */
+    public function setFromUserId(\AppBundle\Entity\Users $fromUserId = null)
+    {
+        $this->fromUserId = $fromUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get fromUserId
+     *
+     * @return \AppBundle\Entity\Users 
+     */
+    public function getFromUserId()
+    {
+        return $this->fromUserId;
+    }
+
+    /**
+     * Set toUserId
+     *
+     * @param \AppBundle\Entity\Users $toUserId
+     * @return Messages
+     */
+    public function setToUserId(\AppBundle\Entity\Users $toUserId = null)
+    {
+        $this->toUserId = $toUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get toUserId
+     *
+     * @return \AppBundle\Entity\Users 
+     */
+    public function getToUserId()
+    {
+        return $this->toUserId;
     }
 
     /**
@@ -171,7 +172,7 @@ class Messages
     /**
      * Get messageFromUser
      *
-     * @return \AppBundle\Entity\Users
+     * @return \AppBundle\Entity\Users 
      */
     public function getMessageFromUser()
     {
