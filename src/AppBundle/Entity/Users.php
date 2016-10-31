@@ -64,7 +64,7 @@ class Users
     /**
      * @var string
      *
-     * @ORM\Column(name="avatar_link", type="string", length=255, nullable=true)
+     * @ORM\Column(name="avatarLink", type="string", length=255, nullable=true)
      */
     private $avatarLink;
 
@@ -79,13 +79,13 @@ class Users
      */
 
     private $messages;
-
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

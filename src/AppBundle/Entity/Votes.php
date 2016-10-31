@@ -16,7 +16,7 @@ class Votes
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
      */
     private $fromUserId;
 
@@ -25,14 +25,14 @@ class Votes
      *
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="toUserId", referencedColumnName="id")
      */
     private $toUserId;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_good_vote", type="boolean")
+     * @ORM\Column(name="isGoodVote", type="boolean")
      */
     private $isGoodVote;
 
@@ -43,12 +43,6 @@ class Votes
      */
     private $date;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Users", inversedBy="id")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
-     */
-    private $voteFromUser;
-    
 
     /**
      * Set isGoodVote
@@ -140,28 +134,5 @@ class Votes
     public function getToUserId()
     {
         return $this->toUserId;
-    }
-
-    /**
-     * Set voteFromUser
-     *
-     * @param \AppBundle\Entity\Users $voteFromUser
-     * @return Votes
-     */
-    public function setVoteFromUser(\AppBundle\Entity\Users $voteFromUser = null)
-    {
-        $this->voteFromUser = $voteFromUser;
-
-        return $this;
-    }
-
-    /**
-     * Get voteFromUser
-     *
-     * @return \AppBundle\Entity\Users 
-     */
-    public function getVoteFromUser()
-    {
-        return $this->voteFromUser;
     }
 }

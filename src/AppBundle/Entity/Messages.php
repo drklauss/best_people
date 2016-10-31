@@ -23,13 +23,13 @@ class Messages
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
      */
     private $fromUserId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="toUserId", referencedColumnName="id")
      */
     private $toUserId;
 
@@ -49,7 +49,7 @@ class Messages
 
     /**
      * @ORM\OneToOne(targetEntity="Users", inversedBy="id")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
      */
     private $messageFromUser;
 

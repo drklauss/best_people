@@ -38,6 +38,7 @@ class SessionService
     {
         $this->_session->set('id', $user->getId());
         $this->_session->set('nickname', $user->getNickname());
+        // todo: need to calculate and set user karma
         $this->_session->set('karma', $user->getNickname());
         $userGender = $user->getIsFemale() ? 'Female' : 'Male';
         $this->_session->set('gender', $userGender);

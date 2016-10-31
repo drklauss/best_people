@@ -25,11 +25,8 @@ class LoginController extends BaseController
          */
         if ($user) {
             $sessionService = new SessionService();
+            // todo: work with session service
             $sessionService->setUserData($user);
-
-            dump($user->getVotes());
-            exit;
-
         };
         return $this->getErrorsJsonResult();
     }
