@@ -3,18 +3,24 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Users
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsersRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Users
 {
+    const AVATARS_DIR = 'public/assets/images/avatars';
+
     /**
      * @var int
      *
@@ -57,13 +63,13 @@ class Users
      * @var string
      *
      * @ORM\Column(name="isFemale", type="boolean")
-     * * @Assert\NotBlank
+     * @Assert\NotBlank()
      */
     private $isFemale;
 
     /**
      * @var string
-     *
+     * @Assert\Image(maxSize = "2M")
      * @ORM\Column(name="avatarLink", type="string", length=255, nullable=true)
      */
     private $avatarLink;
@@ -79,6 +85,109 @@ class Users
      */
 
     private $messages;
+
+    /**
+     * @Assert\Image(maxSize="1M")
+     */
+    private $image;
+
+    /**
+     * Temporally sets image path
+     * @var $temp
+     */
+    private $temp;
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $image
+     */
+    public function setImage(UploadedFile $image = null)
+    {
+        $this->image = $image;
+        // check if we have an old image path
+        if (isset($this->path)) {
+            // store the old name to delete after the update
+            $this->temp = $this->path;
+            $this->path = null;
+        } else {
+            $this->path = 'initial';
+        }
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getImage()) {
+            // do whatever you want to generate a unique name
+            $filename = sha1(uniqid(mt_rand(), true));
+            $this->avatarLink = $filename.'.'.$this->getImage()->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->getImage()) {
+            return;
+        }
+
+        $this->getImage()->move($this->getUploadRootDir(), $this->avatarLink);
+        if (isset($this->temp)) {
+            unlink($this->getUploadRootDir().'/'.$this->temp);
+            $this->temp = null;
+        }
+        $this->image = null;
+    }
+
+    /**
+     * Get Absolute FilePath
+     * @return null|string
+     */
+    public function getAbsolutePath()
+    {
+        return null === $this->avatarLink
+            ? null
+            : $this->getUploadRootDir().'/'.$this->avatarLink;
+    }
+
+    /**
+     * Get webPath, which can be used in templates
+     * @return null|string
+     */
+    public function getWebPath()
+    {
+        return null === $this->avatarLink
+            ? null
+            : self::AVATARS_DIR.'/'.$this->avatarLink;
+    }
+
+    protected function getUploadRootDir()
+    {
+        $avatarsDir = __DIR__.'/../../../web/'.self::AVATARS_DIR;
+        $fs = new Filesystem();
+        if($fs->exists($avatarsDir)){
+            $fs->mkdir($avatarsDir);
+        }
+        return $avatarsDir;
+    }
+
     /**
      * Constructor
      */
@@ -91,7 +200,7 @@ class Users
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -114,7 +223,7 @@ class Users
     /**
      * Get nickname
      *
-     * @return string 
+     * @return string
      */
     public function getNickname()
     {
@@ -137,7 +246,7 @@ class Users
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -160,7 +269,7 @@ class Users
     /**
      * Get isFemale
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsFemale()
     {
@@ -180,10 +289,11 @@ class Users
         return $this;
     }
 
+
     /**
      * Get avatarLink
      *
-     * @return string 
+     * @return string
      */
     public function getAvatarLink()
     {
@@ -216,7 +326,7 @@ class Users
     /**
      * Get votes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVotes()
     {
@@ -249,7 +359,7 @@ class Users
     /**
      * Get messages
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMessages()
     {
