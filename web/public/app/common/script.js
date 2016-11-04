@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function () {
+define(['jquery', 'bootstrap', 'swal'], function () {
 
     var common = {
         /**
@@ -6,7 +6,36 @@ define(['jquery', 'bootstrap'], function () {
          * @method init
          */
         init: function () {
-
+            common.logOut();
+        },
+        /**
+         * Logout user
+         */
+        logOut: function(){
+            $('#logOut').click(function (event) {
+                event.preventDefault();
+                $.post($(this).attr('href'), function(result){
+                    if (result['isError'] == false) {
+                        swal({
+                            title: 'Successfully log out!',
+                            text: 'Now you will be redirected to main page',
+                            type: 'success',
+                            timer: swalWaitTime
+                        });
+                        setTimeout(function(){
+                            location.href = '/';
+                        }, swalWaitTime);
+                    } else {
+                        main.addFormErrors(result['errors']);
+                        swal({
+                            title: 'You\'ve got some errors!',
+                            text: result[errors][0],
+                            type: 'warning',
+                            timer: swalWaitTime
+                        })
+                    }
+                });
+            });
         },
 
         /**

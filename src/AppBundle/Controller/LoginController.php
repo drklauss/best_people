@@ -6,6 +6,7 @@ use AppBundle\Entity\Users;
 use AppBundle\Utils\SessionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -71,4 +72,18 @@ class LoginController extends BaseController
         return $foundUser;
     }
 
+    /**
+     * Logout user and destroy session
+     * @return JsonResponse
+     * @Route("/logout")
+     */
+    public function logoutUser()
+    {
+        $session = new SessionService();
+        if(!$session->_session->invalidate()){
+            $this->addError('Session cannot be stopped now, pls try again');
+        };
+
+        return $this->getErrorsJsonResult();
+    }
 }

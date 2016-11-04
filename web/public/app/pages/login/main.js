@@ -1,7 +1,6 @@
-define(['jquery', 'swal'], function () {
+define(['jquery', 'bootstrap'], function () {
     var formIsValid = true;
     var $errorsBlock = $('#jsLoginFormErrors');
-    var waitTime = 2000;
     var main = {
         init: function () {
 
@@ -38,18 +37,18 @@ define(['jquery', 'swal'], function () {
                                     title: 'Successfully login!',
                                     text: 'Now you will be redirected to main page',
                                     type: 'success',
-                                    timer: waitTime
+                                    timer: swalWaitTime
                                 });
                                 setTimeout(function(){
                                     location.href = '/';
-                                }, waitTime);
+                                }, swalWaitTime);
                             } else {
                                 main.addFormErrors(result['errors']);
                                 swal({
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
                                     type: 'warning',
-                                    timer: waitTime
+                                    timer: swalWaitTime
                                 })
                             }
                         },
@@ -63,7 +62,7 @@ define(['jquery', 'swal'], function () {
                         title: 'Oohhh...',
                         text: 'Check and fill all inputs please!',
                         type: 'error',
-                        timer: waitTime
+                        timer: swalWaitTime
                     })
                 }
             });

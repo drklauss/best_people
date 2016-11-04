@@ -8,6 +8,7 @@ var cssList = {
 };
 // need to prevent duplicate css files
 var cssLoaded = [];
+var swalWaitTime = 1500;
 
 requirejs.config({
     waitSeconds: 15,
@@ -32,28 +33,25 @@ requirejs([
         common.loadCss(cssList.screen);
         common.loadCss(cssList.bootstrap);
         common.loadCss(cssList.fontAwesome);
+        common.loadCss(cssList.swal);
     }
 );
 
 if (typeof(registerPage) !== 'undefined') {
     requirejs([
-        'app/pages/register/main',
-        'app/common/script'
-    ], function (main, common) {
+        'app/pages/register/main'
+    ], function (main) {
             main.init();
             main.sendForm();
-            common.loadCss(cssList.swal);
         }
     );
 }
 if (typeof(loginPage) !== 'undefined') {
     requirejs([
-        'app/pages/login/main',
-        'app/common/script'
-    ], function (main, common) {
+        'app/pages/login/main'
+    ], function (main) {
             main.init();
             main.sendForm();
-            common.loadCss(cssList.swal);
         }
     );
 }

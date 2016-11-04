@@ -1,7 +1,6 @@
-define(['jquery', 'swal'], function () {
+define(['jquery', 'bootstrap'], function () {
     var formIsValid = true;
     var $errorsBlock = $('#js_register_form_errors');
-    var waitTime = 2000;
     var main = {
         init: function () {
 
@@ -63,14 +62,14 @@ define(['jquery', 'swal'], function () {
                                 });
                                 setTimeout(function(){
                                     location.href = '/login';
-                                }, waitTime);
+                                }, swalWaitTime);
                             } else {
                                 main.addFormErrors(result['errors']);
                                 swal({
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
                                     type: 'warning',
-                                    timer: waitTime
+                                    timer: swalWaitTime
                                 })
                             }
                         },
@@ -84,7 +83,7 @@ define(['jquery', 'swal'], function () {
                         title: 'Oohhh...',
                         text: 'Check and fill all inputs please!',
                         type: 'error',
-                        timer: waitTime
+                        timer: swalWaitTime
                     })
                 }
             });
