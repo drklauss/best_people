@@ -157,6 +157,16 @@ class Users
     }
 
     /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+    /**
      * Get Absolute FilePath
      * @return null|string
      */
@@ -182,7 +192,7 @@ class Users
     {
         $avatarsDir = __DIR__.'/../../../web/'.self::AVATARS_DIR;
         $fs = new Filesystem();
-        if($fs->exists($avatarsDir)){
+        if(!$fs->exists($avatarsDir)){
             $fs->mkdir($avatarsDir);
         }
         return $avatarsDir;
@@ -274,30 +284,6 @@ class Users
     public function getIsFemale()
     {
         return $this->isFemale;
-    }
-
-    /**
-     * Set avatarLink
-     *
-     * @param string $avatarLink
-     * @return Users
-     */
-    public function setAvatarLink($avatarLink)
-    {
-        $this->avatarLink = $avatarLink;
-
-        return $this;
-    }
-
-
-    /**
-     * Get avatarLink
-     *
-     * @return string
-     */
-    public function getAvatarLink()
-    {
-        return $this->avatarLink;
     }
 
     /**

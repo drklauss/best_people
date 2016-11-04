@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 class BaseController extends Controller
@@ -121,5 +123,20 @@ class BaseController extends Controller
         }
         $em->flush();
     }
+
+//    /**
+//     * @Route("/test")
+//     */
+//    public function testAction(){
+//        $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
+//        $user = $usersRepository->find('4');
+//        $em = $this->getDoctrine()->getManager();
+//        dump($user);
+//        $em->remove($user);
+//        $em->flush();
+//
+//        exit;
+//
+//    }
 }
 

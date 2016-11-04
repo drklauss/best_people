@@ -42,20 +42,9 @@ class RegisterController extends BaseController
         $user->setNickname($post->get('nickname'));
         $user->setPassword($post->get('password'));
         $image = $request->files->get('avatar');
-        // replace avatarlink with setImage
-        $user->setAvatarLink($image);
-        // test FileSystem
-        $avatarsDir = __DIR__.'/../../../web/public/assets/images/avatars';
-        $fs = new Filesystem();
-        if(!$fs->exists($avatarsDir)){
-            $fs->mkdir($avatarsDir);
-            dump('false');
-        } else{
-            dump('true');
-        }
-        exit;
+        $user->setImage($image);;
         $this->_captcha = $post->get('g-recaptcha-response');
-        $isFemale = $post->get('isFemale') ? 1 : 0;
+        $isFemale = ($post->get('isFemale') === 'true') ? 1 : 0;
         $user->setIsFemale($isFemale);
         return $user;
 

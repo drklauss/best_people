@@ -10,6 +10,7 @@ namespace AppBundle\Utils;
 
 
 use AppBundle\Entity\Users;
+use AppBundle\Entity\Votes;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -38,8 +39,16 @@ class SessionService
     {
         $this->_session->set('id', $user->getId());
         $this->_session->set('nickname', $user->getNickname());
-        // todo: need to calculate and set user karma
-        $this->_session->set('karma', $user->getNickname());
+        $this->_session->set('isLogin', true);
+        $karma = 0;
+        $votesArray = $user->getVotes()->getValues();
+        foreach ($votesArray as $vote) {
+            /**
+             * @var $vote Votes
+             */
+            $vote->getIsGoodVote() ? $karma += 1 : $karma -= 1;
+        }
+        $this->_session->set('karma', $karma);
         $userGender = $user->getIsFemale() ? 'Female' : 'Male';
         $this->_session->set('gender', $userGender);
 
@@ -51,9 +60,10 @@ class SessionService
             'id' => $this->_session->get('id'),
             'nickname' => $this->_session->get('nickname'),
             'gender' => $this->_session->get('gender'),
+            'karma' => $this->_session->get('karma')
         );
+        $this->_sessionData['isLogin'] = $this->_session->get('isLogin');
         $this->_sessionData['userData'] = $userData;
-        $this->_sessionData['someVar'] = 'testVarrrr1';
 
 
         return $this->_sessionData;

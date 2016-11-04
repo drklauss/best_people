@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Utils\SessionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,15 +26,10 @@ class RenderPagesController extends Controller
      */
     public function renderAuthRegisterBlockAction($page)
     {
-        $user = array(
-            'name' => 'Alexey',
-            'photo' => 'url',
-            'carma' => 900
-        );
-        // replace this example code with whatever you need
+        $session = new SessionService();
+        $sessionData = $session->getSessionData();
         return $this->render('AppBundle:Auth:authRegisterBlock.html.twig', array(
-            'registered' => true,
-            'user' => $user,
+            'sessionData' => $sessionData,
             'page' => $page
         ));
     }

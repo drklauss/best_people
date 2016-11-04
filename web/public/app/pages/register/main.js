@@ -58,13 +58,12 @@ define(['jquery', 'swal'], function () {
                                 swal({
                                     title: 'Account created!',
                                     text: 'Now you will be redirected to login form',
-                                    type: 'success',
-                                    showConfirmButton: true,
-                                    confirmButtonText: "Yes, redirect me!",
-                                    confirmButtonColor: "#2e6da4"
-                                }, function () {
-                                    location.href = '/login'
+                                    type: 'success'
+
                                 });
+                                setTimeout(function(){
+                                    location.href = '/login';
+                                }, waitTime);
                             } else {
                                 main.addFormErrors(result['errors']);
                                 swal({
