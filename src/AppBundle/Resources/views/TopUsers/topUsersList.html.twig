@@ -1,25 +1,29 @@
-{% for user in users %}
+{% for user in usersList %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
                 <i class="fa fa-user" aria-hidden="true"></i>
-                <a href="#">{{ user.name }}</a>
+                <a href="/lk/{{ user.id }}">{{ user.nickname }}</a>
             </h3>
         </div>
         <div class="list-people panel-body">
             <div class="item pull-left">
-                <img src="..." alt="..." class="img-thumbnail">
+                {% if user.image %}
+                    <img src={{ user.image|imagine_filter('main_list') }} class="img-thumbnail">
+                 {% else %}
+                    <img src={{"public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
+                 {% endif %}
             </div>
             <div class="item">
-                <h2>{{ user.carma }}</h2>
+                <h2><strong>karma:</strong> {{ user.karma }}</h2>
             </div>
             <div class="item pull-right">
                 <div class="btn-group-vertical" role="group">
-                    <button type="button" class="btn btn-default" id="js_btn_vote_up"><i class="fa fa-plus-square"
-                                                                                         aria-hidden="true"></i>
+                    <button type="button" class="btn btn-default {% if user.isVoted %}disabled{% endif %}" id="js_btn_vote_up">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="btn btn-default" id="js_btn_vote_down"><i class="fa fa-minus-square"
-                                                                                           aria-hidden="true"></i>
+                    <button type="button" class="btn btn-default {% if user.isVoted %}disabled{% endif %}" id="js_btn_vote_down">
+                        <i class="fa fa-minus-square" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>

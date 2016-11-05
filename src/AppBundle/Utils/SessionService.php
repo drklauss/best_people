@@ -64,8 +64,6 @@ class SessionService
         );
         $this->_sessionData['isLogin'] = $this->_session->get('isLogin');
         $this->_sessionData['userData'] = $userData;
-
-
         return $this->_sessionData;
     }
 
