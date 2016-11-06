@@ -1,11 +1,8 @@
 liip_imagine:
     filter_sets:
-        # name our filter set "my_thumb_filter"
+        # name our filter set "main_list"
         main_list:
             filters:
-                # use and setup the "thumbnail" filter
                 thumbnail:
-                    # set the thumbnail size to "32x32" pixels
                     size: [64, 64]
-                    # crop the input image, if required
                     mode: outbound

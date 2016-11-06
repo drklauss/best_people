@@ -7,7 +7,7 @@ define(['jquery', 'bootstrap'], function () {
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover"}
             );
-            $('#jsDisclosePassword').click(function () {
+            $('#jsDisclosePassword').on('click touchstart',function () {
                 if ($(this).prop('checked')) {
                     $('#jsPasswordInput').attr('type', 'text')
                 } else {
@@ -19,7 +19,7 @@ define(['jquery', 'bootstrap'], function () {
          * Send Form
          */
         sendForm: function () {
-            $('#jsLoginBtn').click(function (event) {
+            $('#jsLoginBtn').on('click touchstart', function (event) {
                 event.preventDefault();
                 main.removeFormErrors();
                 var $form = $('#jsLoginForm');

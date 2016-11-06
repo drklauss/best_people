@@ -37,6 +37,15 @@ requirejs([
     }
 );
 
+if (typeof(indexPage) !== 'undefined') {
+    requirejs([
+        'app/pages/index/main'
+    ], function (main) {
+            main.init();
+            main.sendVote();
+        }
+    );
+}
 if (typeof(registerPage) !== 'undefined') {
     requirejs([
         'app/pages/register/main'
