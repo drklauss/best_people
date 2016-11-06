@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="votes")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VotesRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Votes
 {
@@ -43,6 +44,16 @@ class Votes
      */
     private $date;
 
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setDateTimeNow()
+    {
+        if ($this->getDate() == null) {
+            $this->date = new \DateTime('now');
+        }
+    }
 
     /**
      * Set isGoodVote
@@ -60,7 +71,7 @@ class Votes
     /**
      * Get isGoodVote
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsGoodVote()
     {
@@ -83,7 +94,7 @@ class Votes
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -106,7 +117,7 @@ class Votes
     /**
      * Get fromUserId
      *
-     * @return \AppBundle\Entity\Users 
+     * @return \AppBundle\Entity\Users
      */
     public function getFromUserId()
     {
@@ -129,7 +140,7 @@ class Votes
     /**
      * Get toUserId
      *
-     * @return \AppBundle\Entity\Users 
+     * @return \AppBundle\Entity\Users
      */
     public function getToUserId()
     {

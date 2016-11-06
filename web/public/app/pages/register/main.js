@@ -57,7 +57,9 @@ define(['jquery', 'bootstrap'], function () {
                                 swal({
                                     title: 'Account created!',
                                     text: 'Now you will be redirected to login form',
-                                    type: 'success'
+                                    showConfirmButton: false,
+                                    type: 'success',
+                                    timer: swalWaitTime
 
                                 });
                                 setTimeout(function(){
@@ -68,6 +70,7 @@ define(['jquery', 'bootstrap'], function () {
                                 swal({
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
+                                    showConfirmButton: false,
                                     type: 'warning',
                                     timer: swalWaitTime
                                 })

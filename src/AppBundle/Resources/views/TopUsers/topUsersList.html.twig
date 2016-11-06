@@ -10,21 +10,27 @@
             <div class="item pull-left">
                 {% if user.image %}
                     <img src={{ user.image|imagine_filter('main_list') }} class="img-thumbnail">
-                 {% else %}
-                    <img src={{"public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
-                 {% endif %}
+                {% else %}
+                    <img src={{ "public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
+                {% endif %}
             </div>
-            <div class="item">
-                <h2><strong>karma:</strong> {{ user.karma }}</h2>
+            <div class="item karma">
+                <h2>{{ user.karma }}</h2>
             </div>
             <div class="item pull-right">
                 <div class="btn-group-vertical vote-action" data-id="{{ user.id }}" role="group">
-                    <button type="button" class="btn btn-default vote-up {% if user.isVoted %}disabled{% endif %}"
-                            data-toggle="tooltip" data-placement="right" title="Increase karma">
+                    <button type="button"
+                            class="btn btn-default vote-up {% if user.isVoted or user.id == authUserId %}disabled{% endif %}"
+                            data-toggle="tooltip" data-placement="right" title="Increase karma"
+                            {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
+                    >
                         <i class="fa fa-plus-square" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="btn btn-default vote-down {% if user.isVoted %}disabled{% endif %}"
-                            data-toggle="tooltip" data-placement="right" title="Decrease karma">
+                    <button type="button"
+                            class="btn btn-default vote-down {% if user.isVoted or user.id == authUserId %}disabled{% endif %}"
+                            data-toggle="tooltip" data-placement="right" title="Decrease karma"
+                            {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
+                    >
                         <i class="fa fa-minus-square" aria-hidden="true"></i>
                     </button>
                 </div>

@@ -2,12 +2,11 @@ define(['jquery', 'bootstrap'], function () {
     var main = {
         init: function () {
             $('[data-toggle="tooltip"]').tooltip(
-                {"trigger": "hover", delay: { "show": 500, "hide": 100 }}
+                {"trigger": "hover", delay: {"show": 500, "hide": 100}}
             );
-
         },
         /**
-         * Send Form
+         * Send Vote
          */
         sendVote: function () {
             $('.vote-action').on('click touchstart', 'button', function (event) {
@@ -32,18 +31,21 @@ define(['jquery', 'bootstrap'], function () {
                                 title: 'Success!',
                                 text: 'You are successfully voted for this user',
                                 type: 'success',
+                                showConfirmButton: false,
                                 timer: swalWaitTime
                             });
-                            setTimeout(function () {
-                                location.href = '/';
-                            }, swalWaitTime);
+                            // update user karma after sending vote
+                            main.recalculateKarma(userId, $voteBtn);
                         } else {
                             swal({
                                 title: 'You\'ve got some errors!',
-                                text: 'Please be more patience and follow instructions',
+                                text: result['errors']['voteError'],
                                 type: 'warning',
+                                showConfirmButton: false,
                                 timer: swalWaitTime
-                            })
+                            });
+                            $voteBtn.parent().find('button').attr('disabled', false);
+
                         }
                     },
                     error: function (result) {
@@ -54,26 +56,33 @@ define(['jquery', 'bootstrap'], function () {
                 })
 
                     .always(function () {
-                        console.log('jere i am');
+                        // hack: destroys all tooltips
+                        $('[data-toggle="tooltip"]').tooltip('destroy');
                         $voteBtn.find('i').removeClass('fa-circle-o-notch fa-spin');
                     });
             });
         },
+
         /**
-         * Validate Form
-         * @param $form
+         * Recalculate karma after sending vote
+         * @param userId
+         * @param $voteBtn
          */
-        validateForm: function ($form) {
-            var inputsAreValid = true;
-            $form.find('input:required').each(function () {
-                if (!$(this).val().length) {
-                    inputsAreValid = false;
+        recalculateKarma: function (userId, $voteBtn) {
+            var karmaEl = $voteBtn.parents('.item').siblings('.karma').find('h2');
+            $.ajax({
+                url: '/recalculate/' + userId,
+                method: 'GET',
+                success: function (result) {
+                    karmaEl.text(result['karma']);
+                },
+                error: function (result) {
+                    console.log(result);
                 }
-            });
-            formIsValid = inputsAreValid;
+
+            })
+
         }
-
-
     };
     return main;
 });

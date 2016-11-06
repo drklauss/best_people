@@ -19,7 +19,7 @@ class BaseController extends Controller
      */
     protected $_captcha;
 
-     /**
+    /**
      * List of errors
      * @var array
      */
@@ -44,10 +44,16 @@ class BaseController extends Controller
     /**
      * Add error
      * @param $error
+     * @param $key
      */
-    protected function addError($error){
+    protected function addError($error, $key = null)
+    {
         $this->_errors['isError'] = true;
-        $this->_errors['errors'][] = $error;
+        if (isset($key)) {
+            $this->_errors['errors'][$key] = $error;
+        } else {
+            $this->_errors['errors'][] = $error;
+        }
     }
 
     /**
@@ -55,7 +61,8 @@ class BaseController extends Controller
      * @param $data
      * @return JsonResponse
      */
-    protected function getJsonResult($data){
+    protected function getJsonResult($data)
+    {
         $response = new JsonResponse();
         $response->setData($data);
         return $response;
@@ -65,11 +72,13 @@ class BaseController extends Controller
      * Get Errors Json Response
      * @return JsonResponse
      */
-    protected function getErrorsJsonResult(){
+    protected function getErrorsJsonResult()
+    {
         $response = new JsonResponse();
         $response->setData($this->_errors);
         return $response;
     }
+
     /**
      * @param string $captcha
      * @return bool

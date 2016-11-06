@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
-
-
 class LoginController extends BaseController
 {
 
@@ -80,10 +78,9 @@ class LoginController extends BaseController
     public function logoutUser()
     {
         $session = new SessionService();
-        if(!$session->_session->invalidate()){
-            $this->addError('Session cannot be stopped now, pls try again');
+        if (!$session->_session->invalidate()) {
+            $this->addError('Session cannot be stopped now, pls try again', 'session');
         };
-
         return $this->getErrorsJsonResult();
     }
 }

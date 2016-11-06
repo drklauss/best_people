@@ -20,6 +20,7 @@ class TopUsersController extends Controller
     {
         $sessionService = new SessionService();
         $sessionData = $sessionService->getSessionData();
+        $authUserId = $sessionData['userData']['id'];
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $usersListData = array();
         foreach ($usersRepository->findAll() as $user) {
@@ -33,7 +34,7 @@ class TopUsersController extends Controller
                 /**
                  * @var $vote Votes
                  */
-                if ($sessionData['userData']['id'] == $vote->getFromUserId()->getId()) {
+                if ($authUserId == $vote->getFromUserId()->getId()) {
                     $isVoted = true;
                 }
                 $vote->getIsGoodVote() ? $karma++ : $karma--;
@@ -48,7 +49,12 @@ class TopUsersController extends Controller
             );
         }
         $this->arraySort($usersListData);
-        return $this->render('AppBundle:TopUsers:topUsersList.html.twig', array('usersList' => $usersListData));
+        return $this->render('AppBundle:TopUsers:topUsersList.html.twig',
+            array(
+                'usersList' => $usersListData,
+                'authUserId' => $authUserId
+            )
+        );
     }
 
     /**

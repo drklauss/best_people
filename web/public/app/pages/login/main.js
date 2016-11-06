@@ -37,6 +37,7 @@ define(['jquery', 'bootstrap'], function () {
                                     title: 'Successfully login!',
                                     text: 'Now you will be redirected to main page',
                                     type: 'success',
+                                    showConfirmButton: false,
                                     timer: swalWaitTime
                                 });
                                 setTimeout(function(){
@@ -48,6 +49,7 @@ define(['jquery', 'bootstrap'], function () {
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
                                     type: 'warning',
+                                    showConfirmButton: false,
                                     timer: swalWaitTime
                                 })
                             }
@@ -62,6 +64,7 @@ define(['jquery', 'bootstrap'], function () {
                         title: 'Oohhh...',
                         text: 'Check and fill all inputs please!',
                         type: 'error',
+                        showConfirmButton: false,
                         timer: swalWaitTime
                     })
                 }

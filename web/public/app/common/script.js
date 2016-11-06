@@ -20,17 +20,18 @@ define(['jquery', 'bootstrap', 'swal'], function () {
                             title: 'Successfully log out!',
                             text: 'Now you will be redirected to main page',
                             type: 'success',
+                            showConfirmButton: false,
                             timer: swalWaitTime
                         });
                         setTimeout(function(){
                             location.href = '/';
                         }, swalWaitTime);
                     } else {
-                        main.addFormErrors(result['errors']);
                         swal({
                             title: 'You\'ve got some errors!',
-                            text: result[errors][0],
+                            text: result['errors']['session'],
                             type: 'warning',
+                            showConfirmButton: false,
                             timer: swalWaitTime
                         })
                     }
