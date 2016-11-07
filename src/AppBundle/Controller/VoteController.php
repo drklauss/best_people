@@ -31,19 +31,23 @@ class VoteController extends BaseController
         $fromUserId = $sessionData['userData']['id'];
         $toUserId = $getRequest->get('id');
         $isGoodVote = true;
-        if ($getRequest->get('isGoodVote') == 'false'){
+        if ($getRequest->get('isGoodVote') == 'false') {
             $isGoodVote = false;
         }
-
-        if ($sessionData['isLogin'] == true) {
-            if ($this->canVote($fromUserId, $toUserId)) {
-                $this->addVote($fromUserId, $toUserId, $isGoodVote);
-            } else {
-                $this->addError('You already vote for this user!', 'voteError');
-            }
+        if ($fromUserId == $toUserId) {
+            $this->addError('You cannot vote for yourself!', 'voteError');
         } else {
-            $this->addError('You should login before vote!', 'voteError');
+            if ($sessionData['isLogin'] == true) {
+                if ($this->canVote($fromUserId, $toUserId)) {
+                    $this->addVote($fromUserId, $toUserId, $isGoodVote);
+                } else {
+                    $this->addError('You already vote for this user!', 'voteError');
+                }
+            } else {
+                $this->addError('You should login before vote!', 'voteError');
+            }
         }
+
         return $this->getErrorsJsonResult();
     }
 

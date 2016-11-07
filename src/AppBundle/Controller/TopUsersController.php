@@ -15,6 +15,7 @@ class TopUsersController extends Controller
 
     /**
      * Shows top-15 users list
+     * @return Response
      */
     public function showTopUsersListAction()
     {
@@ -25,16 +26,19 @@ class TopUsersController extends Controller
         $usersListData = array();
         foreach ($usersRepository->findAll() as $user) {
             $isVoted = false;
+            $isGoodVote = null;
             $karma = 0;
             /**
              * @var $user Users
              */
             $votesArray = $user->getVotes()->getValues();
             foreach ($votesArray as $vote) {
+
                 /**
                  * @var $vote Votes
                  */
                 if ($authUserId == $vote->getFromUserId()->getId()) {
+                    $isGoodVote = $vote->getIsGoodVote();
                     $isVoted = true;
                 }
                 $vote->getIsGoodVote() ? $karma++ : $karma--;
@@ -45,13 +49,14 @@ class TopUsersController extends Controller
                 'karma' => $karma,
                 'image' => $user->getWebPath(),
                 'isVoted' => $isVoted,
+                'isGoodVote' => $isGoodVote
 
             );
         }
-        $this->arraySort($usersListData);
+        $sortedUsersListData = $this->arraySort($usersListData);
         return $this->render('AppBundle:TopUsers:topUsersList.html.twig',
             array(
-                'usersList' => $usersListData,
+                'usersList' => $sortedUsersListData,
                 'authUserId' => $authUserId
             )
         );
@@ -65,7 +70,8 @@ class TopUsersController extends Controller
     private function arraySort($array)
     {
         usort($array, function ($a, $b) {
-            return $a['karma'] - $b['karma'];
+            return $a['karma'] < $b['karma'];
         });
+        return $array;
     }
 }

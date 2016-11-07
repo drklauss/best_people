@@ -1,4 +1,13 @@
 {% for user in usersList %}
+    {# Add bold plus or minus to voted  button #}
+    {% set plusClass = 'fa fa-plus-square-o' %}
+    {% set minusClass = 'fa fa-minus-square-o' %}
+    {% if user.isGoodVote is not null and user.isGoodVote %}
+        {% set plusClass = 'fa fa-plus-square' %}
+    {% elseif user.isGoodVote is not null and not user.isGoodVote %}
+        {% set minusClass = 'fa fa-minus-square' %}
+    {% endif %}
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
@@ -24,14 +33,14 @@
                             data-toggle="tooltip" data-placement="right" title="Increase karma"
                             {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
                     >
-                        <i class="fa fa-plus-square" aria-hidden="true"></i>
+                        <i class="{{ plusClass }}" aria-hidden="true"></i>
                     </button>
                     <button type="button"
                             class="btn btn-default vote-down {% if user.isVoted or user.id == authUserId %}disabled{% endif %}"
                             data-toggle="tooltip" data-placement="right" title="Decrease karma"
                             {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
                     >
-                        <i class="fa fa-minus-square" aria-hidden="true"></i>
+                        <i class="{{ minusClass }}" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>

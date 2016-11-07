@@ -80,6 +80,7 @@ class BaseController extends Controller
     }
 
     /**
+     * Checks if captcha is good
      * @param string $captcha
      * @return bool
      */

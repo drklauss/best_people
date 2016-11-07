@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="votes")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VotesRepository")
  * @ORM\HasLifecycleCallbacks
+ *
  */
 class Votes
 {

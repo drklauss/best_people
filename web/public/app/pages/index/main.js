@@ -17,7 +17,6 @@ define(['jquery', 'bootstrap'], function () {
 
                 var userId = parseInt($voteBtn.parent().data('id'));
                 var isGoodVote = $voteBtn.hasClass('vote-up');
-                // console.log($(this), userId, isGoodVote);
                 $.ajax({
                     url: '/vote',
                     method: 'GET',
@@ -36,6 +35,7 @@ define(['jquery', 'bootstrap'], function () {
                             });
                             // update user karma after sending vote
                             main.recalculateKarma(userId, $voteBtn);
+                            main.doBoldIcon($voteBtn, isGoodVote);
                         } else {
                             swal({
                                 title: 'You\'ve got some errors!',
@@ -82,7 +82,17 @@ define(['jquery', 'bootstrap'], function () {
 
             })
 
+        },
+        /**
+         * Do bold olus or minus after vote
+         * @param isGoodVote
+         * @param $voteBtn
+         */
+        doBoldIcon: function ($voteBtn, isGoodVote) {
+            var boldClass = isGoodVote ? 'fa fa-plus-square' : 'fa fa-minus-square';
+            $voteBtn.find('i').removeClass().addClass(boldClass);
         }
+
     };
     return main;
 });
