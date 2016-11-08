@@ -34,8 +34,11 @@ define(['jquery', 'bootstrap'], function () {
                                 timer: swalWaitTime
                             });
                             // update user karma after sending vote
+                            setTimeout(function(){
+                                location.reload();
+                            }, swalWaitTime);
                             main.recalculateKarma(userId, $voteBtn);
-                            main.doBoldIcon($voteBtn, isGoodVote);
+                            $voteBtn.removeClass('btn-default').addClass('btn-primary');
                         } else {
                             swal({
                                 title: 'You\'ve got some errors!',
@@ -82,15 +85,6 @@ define(['jquery', 'bootstrap'], function () {
 
             })
 
-        },
-        /**
-         * Do bold olus or minus after vote
-         * @param isGoodVote
-         * @param $voteBtn
-         */
-        doBoldIcon: function ($voteBtn, isGoodVote) {
-            var boldClass = isGoodVote ? 'fa fa-plus-square' : 'fa fa-minus-square';
-            $voteBtn.find('i').removeClass().addClass(boldClass);
         }
 
     };
