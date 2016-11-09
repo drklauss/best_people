@@ -9,3 +9,12 @@
 .panel-title a:hover {
     text-decoration: none;
 }
+
+.edit-link {
+    color: #222;
+}
+
+
+.edit-link:hover {
+    color: #a94442;
+}

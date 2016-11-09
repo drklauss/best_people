@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RenderPagesController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="homePage")
      */
     public function renderIndexPageAction()
     {
@@ -35,7 +35,7 @@ class RenderPagesController extends Controller
     }
 
     /**
-     * @Route("/register", name="registerpage")
+     * @Route("/register", name="registerPage")
      */
     public function renderRegisterPageAction()
     {
@@ -44,11 +44,20 @@ class RenderPagesController extends Controller
     }
 
     /**
-     * @Route("/login", name="loginpage")
+     * @Route("/login", name="loginPage")
      */
     public function renderLoginPageAction()
     {
-        // todo if user is authorized -> offer him to logout first
         return $this->render('login.html.twig');
+    }
+
+    /**
+     * @Route("/user/{userId}", name="lk", requirements={"userId": "\d+"})
+     * @param $userId int
+     * @return Response
+     */
+    public function renderLKAction($userId)
+    {
+        return $this->render('user.html.twig', array('userId' => $userId));
     }
 }

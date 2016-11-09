@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <div class="row">
         <div class="col-sm-4">
             <div class="page-header">
-                <h2>Best Internet People</h2>
+                <h2>Personal Information</h2>
             </div>
         </div>
         <div class="col-sm-3 col-sm-offset-5">
@@ -13,13 +14,14 @@
     </div>
     <div class="row">
         <div class="col-sm-6">
-            {{ render( controller( 'AppBundle:TopUsers:showTopUsersList' )) }}
+            {{ render( controller( 'AppBundle:User:showUserInfo', {'userId' : userId} )) }}
+            {#{{ render( controller( 'AppBundle:User:showUserInfo' )) }}#}
         </div>
         <div class="col-sm-6"></div>
     </div>
     {% verbatim %}
         <script >
-            var indexPage = true;
+            var lkPage = true;
         </script>
     {% endverbatim %}
 {% endblock %}

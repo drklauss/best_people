@@ -12,13 +12,13 @@
         <div class="panel-heading">
             <h3 class="panel-title">
                 <i class="fa fa-user" aria-hidden="true"></i>
-                <a href="/lk/{{ user.id }}">{{ user.nickname }}</a>
+                <a href="/user/{{ user.id }}">{{ user.nickname }}</a>
             </h3>
         </div>
         <div class="list-people panel-body">
             <div class="item pull-left">
                 {% if user.image %}
-                    <img src={{ user.image|imagine_filter('main_list') }}>
+                    <img src={{ user.image|imagine_filter('main_list') }} class="img-thumbnail">
                 {% else %}
                     <img src={{ "public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
                 {% endif %}

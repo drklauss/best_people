@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class TopUsersController extends Controller
+class TopUsersController extends BaseController
 {
 
     /**
@@ -24,32 +24,18 @@ class TopUsersController extends Controller
         $authUserId = $sessionData['userData']['id'];
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $usersListData = array();
+        /**
+         * @var $user Users
+         */
         foreach ($usersRepository->findAll() as $user) {
-            $isVoted = false;
-            $isGoodVote = null;
-            $karma = 0;
-            /**
-             * @var $user Users
-             */
-            $votesArray = $user->getVotes()->getValues();
-            foreach ($votesArray as $vote) {
-
-                /**
-                 * @var $vote Votes
-                 */
-                if ($authUserId == $vote->getFromUserId()->getId()) {
-                    $isGoodVote = $vote->getIsGoodVote();
-                    $isVoted = true;
-                }
-                $vote->getIsGoodVote() ? $karma++ : $karma--;
-            }
+            $this->getVotesAndKarma($user, $authUserId);
             $usersListData[] = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
-                'karma' => $karma,
+                'karma' => $this->_karma,
                 'image' => $user->getWebPath(),
-                'isVoted' => $isVoted,
-                'isGoodVote' => $isGoodVote
+                'isVoted' => $this->_isVoted,
+                'isGoodVote' => $this->_isGoodVote
 
             );
         }

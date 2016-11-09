@@ -6,7 +6,7 @@
             {% set badgeClass =  'alert-danger' %}
         {% endif %}
         <div class="list-group">
-            <a href="/lk" class="list-group-item">
+            <a href="/user/{{ sessionData.userData.id }}" class="list-group-item">
                 <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname }}
                 <span class="badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
             </a>

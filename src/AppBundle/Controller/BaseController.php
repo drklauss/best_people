@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Users;
+use AppBundle\Entity\Votes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class BaseController extends Controller
 {
     const SALT = 'bestPeople';
+
+    /**
+     * @var bool
+     */
+    protected $_isVoted = false;
+    /**
+     * @var null
+     */
+    protected $_isGoodVote = null;
+    /**
+     * @var int
+     */
+    protected $_karma = 0;
 
     /**
      * Google captcha
@@ -134,6 +148,32 @@ class BaseController extends Controller
         $em->flush();
     }
 
+    /**
+     * Calculate user votes and karma
+     * @param $authUserId string
+     * @param $user Users
+     */
+    protected function getVotesAndKarma($user, $authUserId)
+    {
+        $this->_isGoodVote = null;
+        $this->_isVoted = false;
+        $this->_karma = 0;
+
+        /**
+         * @var $user Users
+         */
+        $votesArray = $user->getVotes()->getValues();
+        foreach ($votesArray as $vote) {
+            /**
+             * @var $vote Votes
+             */
+            if ($authUserId == $vote->getFromUserId()->getId()) {
+                $this->_isGoodVote = $vote->getIsGoodVote();
+                $this->_isVoted = true;
+            }
+            $vote->getIsGoodVote() ? $this->_karma++ : $this->_karma--;
+        }
+    }
 //    /**
 //     * @Route("/test")
 //     */
