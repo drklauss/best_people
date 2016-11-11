@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-3">
+            <div class="page-header">
+                <h2>Best Internet People</h2>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            {{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock')) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            {{ render( controller( 'AppBundle:User:showTopUsersList' )) }}
+        </div>
+    </div>
+    {% verbatim %}
+        <script >
+            var homePage = true;
+        </script>
+    {% endverbatim %}
+{% endblock %}

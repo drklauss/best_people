@@ -1,77 +1,55 @@
 define(['jquery', 'bootstrap'], function () {
     var formIsValid = true;
-    var $errorsBlock = $('#js_register_form_errors');
-    var main = {
+    var $errorsBlock = $('#jsLoginFormErrors');
+    var login = {
         init: function () {
 
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover"}
             );
-            $('#jsDisclosePassword').click(function () {
+            $('#jsDisclosePassword').on('click touchstart',function () {
                 if ($(this).prop('checked')) {
                     $('#jsPasswordInput').attr('type', 'text')
                 } else {
                     $('#jsPasswordInput').attr('type', 'password')
                 }
             });
-            // imitate clicking on file button
-            $('#jsFileInputTrigger').on('click touchstart', function (event) {
-                event.preventDefault();
-                $('#jsFileInput').click();
-            });
-            // write filename after file select
-            $('#jsFileInput').on('change', function () {
-                var filename = $(this).val().split('\\').pop();
-                $('#jsFileNameArea').val(filename);
-            });
-            // need to imitate selector
-            $('#jsGenderSelect').on('click touchstart', 'button', function (event) {
-                event.preventDefault();
-                $('#jsGenderSelect').find('button').removeClass('active');
-                $(this).addClass('active');
-                var isFemale = ($(this).text() === 'Female');
-                $('#jsGenderInput').val(Boolean(isFemale));
-            })
         },
         /**
          * Send Form
          */
         sendForm: function () {
-            $('#jsRegisterBtn').click(function (event) {
+            $('#jsLoginBtn').on('click touchstart', function (event) {
                 event.preventDefault();
-                main.removeFormErrors();
-                var $form = $('#jsRegisterForm');
-                main.validateForm($form);
+                login.removeFormErrors();
+                var $form = $('#jsLoginForm');
+                login.validateForm($form);
                 if (formIsValid) {
-                    $('#jsRegisterBtn').attr('disabled', true);
-                    var formData = new FormData($form[0]);
+                    $('#jsLoginBtn').attr('disabled', true);
                     $.ajax({
-                        url: '/register/user',
+                        url: '/login/user',
                         method: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+                        data: $form.serialize(),
                         success: function (result) {
-                            $('#jsRegisterBtn').attr('disabled', false);
+                            $('#jsLoginBtn').attr('disabled', false);
                             if (result['isError'] == false) {
                                 swal({
-                                    title: 'Account created!',
-                                    text: 'Now you will be redirected to login form',
-                                    showConfirmButton: false,
+                                    title: 'Successfully login!',
+                                    text: 'Now you will be redirected to main page',
                                     type: 'success',
+                                    showConfirmButton: false,
                                     timer: swalWaitTime
-
                                 });
                                 setTimeout(function(){
-                                    location.href = '/login';
+                                    location.href = '/';
                                 }, swalWaitTime);
                             } else {
-                                main.addFormErrors(result['errors']);
+                                login.addFormErrors(result['errors']);
                                 swal({
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
-                                    showConfirmButton: false,
                                     type: 'warning',
+                                    showConfirmButton: false,
                                     timer: swalWaitTime
                                 })
                             }
@@ -86,6 +64,7 @@ define(['jquery', 'bootstrap'], function () {
                         title: 'Oohhh...',
                         text: 'Check and fill all inputs please!',
                         type: 'error',
+                        showConfirmButton: false,
                         timer: swalWaitTime
                     })
                 }
@@ -97,18 +76,12 @@ define(['jquery', 'bootstrap'], function () {
          */
         validateForm: function ($form) {
             var inputsAreValid = true;
-            var genderIsValid = false;
             $form.find('input:required').each(function () {
                 if (!$(this).val().length) {
                     inputsAreValid = false;
                 }
             });
-            $('#jsGenderSelect').find('button').each(function () {
-                if ($(this).hasClass('active')) {
-                    genderIsValid = true;
-                }
-            });
-            formIsValid = genderIsValid && inputsAreValid;
+            formIsValid = inputsAreValid;
         },
 
         /**
@@ -133,5 +106,5 @@ define(['jquery', 'bootstrap'], function () {
         }
 
     };
-    return main;
+    return login;
 });

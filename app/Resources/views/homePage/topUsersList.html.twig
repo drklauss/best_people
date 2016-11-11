@@ -17,14 +17,16 @@
         </div>
         <div class="list-people panel-body">
             <div class="item pull-left">
-                {% if user.image %}
-                    <img src={{ user.image|imagine_filter('main_list') }} class="img-thumbnail">
-                {% else %}
-                    <img src={{ "public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
-                {% endif %}
+                <a href="/user/{{ user.id }}">
+                    {% if user.image %}
+                        <img src={{ user.image|imagine_filter('main_list') }} class="img-thumbnail">
+                    {% else %}
+                        <img src={{ "public/assets/images/default_avatar.png"|imagine_filter('main_list') }}  class="img-thumbnail">
+                    {% endif %}
+                </a>
             </div>
-            <div class="item karma">
-                <h2>{{ user.karma }}</h2>
+            <div class="item js-karma">
+                <h2>karma: {{ user.karma }}</h2>
             </div>
             <div class="item pull-right">
                 <div class="btn-group-vertical vote-action" data-id="{{ user.id }}" role="group">

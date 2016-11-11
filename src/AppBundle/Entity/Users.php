@@ -69,7 +69,6 @@ class Users
 
     /**
      * @var string
-     * @Assert\Image(maxSize = "2M")
      * @ORM\Column(name="avatarLink", type="string", length=255, nullable=true)
      */
     private $avatarLink;

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ dump(sessionData) }}
+    {{ dump(discoverUserData) }}
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-3">
+            <div class="page-header">
+                <h2>Personal Information</h2>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            {{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock')) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% include 'userPage/infoBlock.html.twig' %}
+            <div class="page-header">
+                <h3>History</h3>
+            </div>
+            {#{{ render( controller( 'AppBundle:User:showKarmaHistory', {'userId' : discoverUserData.id} )) }}#}
+
+            {#{{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock')) }}#}
+        </div>
+    </div>
+    {% verbatim %}
+        <script >
+            var userInfo = true;
+        </script>
+    {% endverbatim %}
+{% endblock %}

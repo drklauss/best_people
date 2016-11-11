@@ -1,0 +1,33 @@
+{% if sessionData.isLogin %}
+    {% if sessionData.userData.karma > 0 %}
+        {% set badgeClass =  'alert-info' %}
+    {% elseif sessionData.userData.karma < 0 %}
+        {% set badgeClass =  'alert-danger' %}
+    {% endif %}
+    <div class="list-group small">
+        <a href="/" class="list-group-item">
+            <i class="fa fa-home" aria-hidden="true"></i> Home
+        </a>
+        <a href="/user/{{ sessionData.userData.id }}" class="list-group-item">
+            <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname }}
+            <span class="badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
+        </a>
+        <a href="/logout" id="logOut" class="list-group-item list-group-item-danger">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            Sign out
+        </a>
+    </div>
+
+{% else %}
+    <div class="list-group small">
+        <a href="/" class="list-group-item">
+            <i class="fa fa-home" aria-hidden="true"></i> Home
+        </a>
+        <a href="/login" class="list-group-item">
+            <i class="fa fa-user fa-fw"></i>Log in
+        </a>
+        <a href="/register" class="list-group-item list-group-item-info">
+            <i class="fa fa-sign-in" aria-hidden="true"></i> Register
+        </a>
+    </div>
+{% endif %}

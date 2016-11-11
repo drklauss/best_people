@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RenderPagesController extends Controller
+class RenderPagesController extends BaseController
 {
     /**
      * @Route("/", name="homePage")
@@ -16,7 +16,7 @@ class RenderPagesController extends Controller
     public function renderIndexPageAction()
     {
         // replace this example code with whatever you need
-        return $this->render('index.html.twig');
+        return $this->render('homePage/home.html.twig');
     }
 
     /**
@@ -24,14 +24,22 @@ class RenderPagesController extends Controller
      * @param $page
      * @return Response
      */
-    public function renderAuthRegisterBlockAction($page)
+    public function renderLoginRegisterBlockAction($page = null)
+
     {
-        $session = new SessionService();
-        $sessionData = $session->getSessionData();
-        return $this->render('AppBundle:Auth:authRegisterBlock.html.twig', array(
-            'sessionData' => $sessionData,
-            'page' => $page
-        ));
+        switch ($page) {
+            case 'register':
+                return $this->render('commonBlocks/registerBlock.html.twig');
+                break;
+            case 'login':
+                return $this->render('commonBlocks/loginBlock.html.twig');
+                break;
+            default:
+                $session = new SessionService();
+                $sessionData = $session->getSessionData();
+                return $this->render('commonBlocks/indexBlock.html.twig', array('sessionData' => $sessionData));
+                break;
+        }
     }
 
     /**
@@ -40,7 +48,7 @@ class RenderPagesController extends Controller
     public function renderRegisterPageAction()
     {
         // todo if user is authorized -> offer him to logout first
-        return $this->render('register.html.twig');
+        return $this->render('registerPage/register.html.twig');
     }
 
     /**
@@ -48,16 +56,39 @@ class RenderPagesController extends Controller
      */
     public function renderLoginPageAction()
     {
-        return $this->render('login.html.twig');
+        return $this->render('loginPage/login.html.twig');
     }
 
     /**
-     * @Route("/user/{userId}", name="lk", requirements={"userId": "\d+"})
+     * @Route("/user/{userId}", name="personalPage", requirements={"userId": "\d+"})
      * @param $userId int
      * @return Response
      */
-    public function renderLKAction($userId)
+    public function renderPersonalPageAction($userId)
     {
-        return $this->render('user.html.twig', array('userId' => $userId));
+        $sessionService = new SessionService();
+        $sessionData = $sessionService->getSessionData();
+        $authUserId = $sessionData['userData']['id'];
+        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
+        $userData = array('hasUser' => false);
+        if ($user) {
+            $this->getVotesAndKarma($user, $authUserId);
+            $userData = array(
+                'id' => $user->getId(),
+                'nickname' => $user->getNickname(),
+                'karma' => $this->_karma,
+                'image' => $user->getWebPath(),
+                'hasUser' => true,
+                'isVoted' => $this->_isVoted,
+                'isGoodVote' => $this->_isGoodVote
+
+            );
+        }
+        return $this->render('userPage/user.html.twig',
+            array(
+                'sessionData' => $sessionData,
+                'discoverUserData' => $userData
+            )
+        );
     }
 }

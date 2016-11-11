@@ -1,5 +1,5 @@
 define(['jquery', 'bootstrap'], function () {
-    var main = {
+    var home = {
         init: function () {
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover", delay: {"show": 500, "hide": 100}}
@@ -37,7 +37,7 @@ define(['jquery', 'bootstrap'], function () {
                             setTimeout(function(){
                                 location.reload();
                             }, swalWaitTime);
-                            main.recalculateKarma(userId, $voteBtn);
+                            home.recalculateKarma(userId, $voteBtn);
                             $voteBtn.removeClass('btn-default').addClass('btn-primary');
                         } else {
                             swal({
@@ -72,7 +72,7 @@ define(['jquery', 'bootstrap'], function () {
          * @param $voteBtn
          */
         recalculateKarma: function (userId, $voteBtn) {
-            var karmaEl = $voteBtn.parents('.item').siblings('.karma').find('h2');
+            var karmaEl = $voteBtn.parents('.item').siblings('.js-karma').find('h2');
             $.ajax({
                 url: '/recalculate/' + userId,
                 method: 'GET',
@@ -88,5 +88,5 @@ define(['jquery', 'bootstrap'], function () {
         }
 
     };
-    return main;
+    return home;
 });

@@ -37,30 +37,39 @@ requirejs([
     }
 );
 
-if (typeof(indexPage) !== 'undefined') {
+if (typeof(homePage) !== 'undefined') {
     requirejs([
-        'app/pages/index/main'
-    ], function (main) {
-            main.init();
-            main.sendVote();
+            'app/pages/homePage'
+        ], function (home) {
+            home.init();
+            home.sendVote();
+        }
+    );
+}
+if (typeof(userInfo) !== 'undefined') {
+    requirejs([
+            'app/pages/homePage'
+        ], function (home) {
+            home.init();
+            home.sendVote();
         }
     );
 }
 if (typeof(registerPage) !== 'undefined') {
     requirejs([
-        'app/pages/register/main'
-    ], function (main) {
-            main.init();
-            main.sendForm();
+            'app/pages/registerPage'
+        ], function (register) {
+            register.init();
+            register.sendForm();
         }
     );
 }
 if (typeof(loginPage) !== 'undefined') {
     requirejs([
-        'app/pages/login/main'
-    ], function (main) {
-            main.init();
-            main.sendForm();
+            'app/pages/loginPage'
+        ], function (login) {
+            login.init();
+            login.sendForm();
         }
     );
 }
