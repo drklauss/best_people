@@ -1,27 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ dump(sessionData) }}
-    {{ dump(discoverUserData) }}
     <div class="row">
         <div class="col-sm-4 col-sm-offset-3">
             <div class="page-header">
-                <h2>Personal Information</h2>
+                {% if hasUser %}
+                    <h2>Personal Information</h2>
+                {% else %}
+                    <h2><i class="fa fa-frown-o fa-lg" aria-hidden="true"></i> The user is not found</h2>
+                {% endif %}
             </div>
         </div>
         <div class="col-sm-2">
-            {{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock')) }}
+            {% include 'homePage/userInfoBlock.html.twig' %}
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-            {% include 'userPage/infoBlock.html.twig' %}
-            <div class="page-header">
-                <h3>History</h3>
-            </div>
-            {#{{ render( controller( 'AppBundle:User:showKarmaHistory', {'userId' : discoverUserData.id} )) }}#}
-
-            {#{{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock')) }}#}
+            {% if hasUser %}
+                {% include 'userPage/userDetailBlock.html.twig' %}
+                <div class="page-header">
+                    <h3>History</h3>
+                </div>
+                {% include 'userPage/votesBlock.html.twig' %}
+                <div class="page-header">
+                    <h3>Comments</h3>
+                </div>
+                {% include 'userPage/commentsBlock.html.twig' %}
+            {% endif %}
+            {% if hasUser and sessionData.isLogin %}
+                {% include 'userPage/commentsFormBlock.html.twig' %}
+            {% endif %}
         </div>
     </div>
     {% verbatim %}

@@ -21,67 +21,53 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends BaseController
 {
 
-//    /**
-//     * @param $userId
-//     * @return \Symfony\Component\HttpFoundation\Response
-//     */
-//    public function showUserInfoAction($userId)
-//    {
-//        $sessionService = new SessionService();
-//        $sessionData = $sessionService->getSessionData();
-//        $authUserId = $sessionData['userData']['id'];
-//        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
-//        $userData = array('hasUser' => false);
-//        if ($user) {
-//            $this->getVotesAndKarma($user, $authUserId);
-//            $userData = array(
-//                'id' => $user->getId(),
-//                'nickname' => $user->getNickname(),
-//                'karma' => $this->_karma,
-//                'image' => $user->getWebPath(),
-//                'hasUser' => true,
-//                'isVoted' => $this->_isVoted,
-//                'isGoodVote' => $this->_isGoodVote
-//
-//            );
-//        }
-//        return $this->render('AppBundle:User:infoBlock.html.twig',
-//            array(
-//                'sessionData' => $sessionData,
-//                'discoverUserData' => $userData
-//            )
-//        );
-//    }
+    /**
+     * Calculate user votes and karma
+     * @param int $authUserId
+     * @param Users $user
+     */
+    protected function setPersonalData(Users $user, $authUserId)
+    {
+        // set messages here too
+        $this->_messages = array(
+            array(
+                'name' => 'lila',
+                'message' => 'hahaha'
+            ),
+            array(
+                'name' => 'Nick',
+                'message' => 'WOW'
+            )
+        );
+        $votesArray = $user->getVotes()->getValues();
+        foreach ($votesArray as $vote) {
+            /**
+             * @var $vote Votes
+             */
+            $this->setVotesHistory($vote);
+            if ($authUserId == $vote->getFromUserId()->getId()) {
+                $this->_isGoodVote = $vote->getIsGoodVote();
+                $this->_isVoted = true;
+            }
+            $vote->getIsGoodVote() ? $this->_karma++ : $this->_karma--;
+        }
+    }
 
     /**
-     * @param $userId
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Get Votes History for selected user
+     * @param Votes $vote
      */
-    public function showKarmaHistoryAction($userId)
+    private function setVotesHistory(Votes $vote)
     {
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
-        $authUserId = $sessionData['userData']['id'];
-        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
-        $userData = array('hasUser' => false);
-        if ($user) {
-            $this->getVotesAndKarma($user, $authUserId);
-            $userData = array(
-                'id' => $user->getId(),
-                'nickname' => $user->getNickname(),
-                'karma' => $this->_karma,
-                'image' => $user->getWebPath(),
-                'hasUser' => true,
-                'isVoted' => $this->_isVoted,
-                'isGoodVote' => $this->_isGoodVote
-
-            );
-        }
-        return $this->render('block/infoBlock1.html.twig',
-            array(
-                'sessionData' => $sessionData,
-                'discoverUserData' => $userData
-            )
+        /**
+         * @var Users $fromUser
+         */
+        $fromUser = $this->getDoctrine()->getRepository('AppBundle:Users')->find($vote->getFromUserId());
+        $this->_votesHistory[] = array(
+            'date' => $vote->getDate(),
+            'fromUser' => $fromUser->getNickname(),
+            'fromUserId' => $fromUser->getId(),
+            'isGoodVote' => $vote->getIsGoodVote()
         );
     }
 
@@ -97,10 +83,10 @@ class UserController extends BaseController
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $usersListData = array();
         /**
-         * @var $user Users
+         * @var Users $user
          */
         foreach ($usersRepository->findAll() as $user) {
-            $this->getVotesAndKarma($user, $authUserId);
+            $this->setPersonalData($user, $authUserId);
             $usersListData[] = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
@@ -122,7 +108,7 @@ class UserController extends BaseController
 
     /**
      * Sort users by karma parameter
-     * @param $array
+     * @param array $array
      * @return array
      */
     private function arraySort($array)

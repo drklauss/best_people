@@ -47,20 +47,17 @@ define(['jquery', 'bootstrap'], function () {
                                 showConfirmButton: false,
                                 timer: swalWaitTime
                             });
-                            $voteBtn.parent().find('button').attr('disabled', false);
-
                         }
                     },
                     error: function (result) {
                         console.log(result);
-                        $voteBtn.parent().find('button').attr('disabled', false);
                     }
 
                 })
-
                     .always(function () {
                         // hack: destroys all tooltips
                         $('[data-toggle="tooltip"]').tooltip('destroy');
+                        $voteBtn.parent().find('button').attr('disabled', false);
                         $voteBtn.find('i').removeClass('fa-circle-o-notch fa-spin');
                     });
             });

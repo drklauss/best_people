@@ -54,6 +54,11 @@ class SessionService
 
     }
 
+    /**
+     * Get session Data for user
+     * [nickname, id, gender, karma, isLogin]
+     * @return array
+     */
     public function getSessionData()
     {
         $userData = array(
@@ -65,6 +70,13 @@ class SessionService
         $this->_sessionData['isLogin'] = $this->_session->get('isLogin');
         $this->_sessionData['userData'] = $userData;
         return $this->_sessionData;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(){
+        return $this->_session->get('id');
     }
 
 }

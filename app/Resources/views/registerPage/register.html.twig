@@ -11,89 +11,14 @@
             </div>
         </div>
         <div class="col-sm-2">
-            {{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock', {'page' : 'register'} )) }}
+            {% include 'registerPage/userInfoBlock.html.twig' %}
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
-                {#<div class="panel-heading">#}
-                    {#<h2 class="text-center">Register new user</h2>#}
-                {#</div>#}
-                <div class="panel-body">
-                    <div id="js_register_form_errors" class="alert alert-danger hidden" role="alert">
-                        <ul></ul>
-                    </div>
-                    <form id="jsRegisterForm">
-                        <div class="form-group">
-                            <label for="jsNameInput">Enter your nickname*</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" id="jsNameInput" name="nickname" class="form-control"
-                                       placeholder="ex. Ivan" aria-describedby="username" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="jsPasswordInput">Enter your password*</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-key" aria-hidden="true"></i>
-                                </span>
-                                    <input type="password" id="jsPasswordInput" name="password" class="form-control"
-                                               placeholder="ex. ivan1" aria-describedby="password" required>
-                                <span class="input-group-addon">
-                                    <input id="jsDisclosePassword" type="checkbox" data-toggle="tooltip" data-placement="top"
-                                           title="Disclose password">
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Choose avatar you like</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="fa fa-picture-o" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" id="jsFileNameArea" class="form-control"
-                                       placeholder="filename will be here..." disabled>
-                                <div class="input-group-btn">
-                                    <input id="jsFileInput" type="file" name="avatar" class="hidden">
-                                    <button id="jsFileInputTrigger" class="btn btn-default">Browse</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Select gender*</label>
-                            <div class="input-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-venus-mars" aria-hidden="true"></i>
-                                        </span>
-                                        <div class="input-group-btn" id="jsGenderSelect">
-                                            <input id="jsGenderInput" type="text" name="isFemale" hidden>
-                                            <button class="btn btn-default">Male</button>
-                                            <button class="btn btn-default">Female</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4">
-                                <div class="g-recaptcha" data-sitekey="6LfOtQkUAAAAAJI7XxTYC01iwoQNkxKZ6GA8qRXr"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-sm-offset-4 pull-right">
-                                <button type="submit" id="jsRegisterBtn" class="btn btn-primary">Register</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
+                {% include 'registerPage/formBlock.html.twig' %}
             </div>
         </div>
     </div>

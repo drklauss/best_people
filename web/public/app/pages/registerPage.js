@@ -1,6 +1,6 @@
 define(['jquery', 'bootstrap'], function () {
     var formIsValid = true;
-    var $errorsBlock = $('#js_register_form_errors');
+    var $errorsBlock = $('#jsRegisterFormErrors');
     var register = {
         init: function () {
 
@@ -37,13 +37,14 @@ define(['jquery', 'bootstrap'], function () {
          * Send Form
          */
         sendForm: function () {
-            $('#jsRegisterBtn').click(function (event) {
+            var registerBtn = $('#jsRegisterBtn');
+            registerBtn.click(function (event) {
                 event.preventDefault();
                 register.removeFormErrors();
                 var $form = $('#jsRegisterForm');
                 register.validateForm($form);
                 if (formIsValid) {
-                    $('#jsRegisterBtn').attr('disabled', true);
+                    registerBtn.attr('disabled', true);
                     var formData = new FormData($form[0]);
                     $.ajax({
                         url: '/register/user',
@@ -52,7 +53,7 @@ define(['jquery', 'bootstrap'], function () {
                         processData: false,
                         contentType: false,
                         success: function (result) {
-                            $('#jsRegisterBtn').attr('disabled', false);
+
                             if (result['isError'] == false) {
                                 swal({
                                     title: 'Account created!',
@@ -62,11 +63,11 @@ define(['jquery', 'bootstrap'], function () {
                                     timer: swalWaitTime
 
                                 });
-                                setTimeout(function(){
+                                setTimeout(function () {
                                     location.href = '/login';
                                 }, swalWaitTime);
                             } else {
-                                main.addFormErrors(result['errors']);
+                                register.addFormErrors(result['errors']);
                                 swal({
                                     title: 'You\'ve got some errors!',
                                     text: 'Please be more patience and follow instructions',
@@ -80,7 +81,10 @@ define(['jquery', 'bootstrap'], function () {
                             // console.log(result);
                         }
 
-                    });
+                    })
+                        .always(function () {
+                            registerBtn.attr('disabled', false);
+                        });
                 } else {
                     swal({
                         title: 'Oohhh...',

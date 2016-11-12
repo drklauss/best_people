@@ -8,39 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RenderPagesController extends BaseController
+class RenderPagesController extends UserController
 {
-    /**
-     * @Route("/", name="homePage")
-     */
-    public function renderIndexPageAction()
-    {
-        // replace this example code with whatever you need
-        return $this->render('homePage/home.html.twig');
-    }
-
-    /**
-     * Render authRegisterBlock block
-     * @param $page
-     * @return Response
-     */
-    public function renderLoginRegisterBlockAction($page = null)
-
-    {
-        switch ($page) {
-            case 'register':
-                return $this->render('commonBlocks/registerBlock.html.twig');
-                break;
-            case 'login':
-                return $this->render('commonBlocks/loginBlock.html.twig');
-                break;
-            default:
-                $session = new SessionService();
-                $sessionData = $session->getSessionData();
-                return $this->render('commonBlocks/indexBlock.html.twig', array('sessionData' => $sessionData));
-                break;
-        }
-    }
 
     /**
      * @Route("/register", name="registerPage")
@@ -60,25 +29,41 @@ class RenderPagesController extends BaseController
     }
 
     /**
+     * @Route("/", name="homePage")
+     */
+    public function renderIndexPageAction()
+    {
+        $sessionService = new SessionService();
+        $sessionData = $sessionService->getSessionData();
+        // replace this example code with whatever you need
+        return $this->render('homePage/home.html.twig',
+            array(
+                'sessionData' => $sessionData
+            )
+        );
+    }
+
+    /**
      * @Route("/user/{userId}", name="personalPage", requirements={"userId": "\d+"})
      * @param $userId int
      * @return Response
      */
     public function renderPersonalPageAction($userId)
     {
+        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
+        $hasUser = false;
         $sessionService = new SessionService();
         $sessionData = $sessionService->getSessionData();
         $authUserId = $sessionData['userData']['id'];
-        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
-        $userData = array('hasUser' => false);
+        $userData = array();
         if ($user) {
-            $this->getVotesAndKarma($user, $authUserId);
+            $hasUser = true;
+            $this->setPersonalData($user, $authUserId);
             $userData = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
                 'karma' => $this->_karma,
                 'image' => $user->getWebPath(),
-                'hasUser' => true,
                 'isVoted' => $this->_isVoted,
                 'isGoodVote' => $this->_isGoodVote
 
@@ -86,9 +71,13 @@ class RenderPagesController extends BaseController
         }
         return $this->render('userPage/user.html.twig',
             array(
+                'hasUser' => $hasUser,
                 'sessionData' => $sessionData,
-                'discoverUserData' => $userData
+                'discoverUserData' => $userData,
+                'votesHistory' => $this->_votesHistory,
+                'messages' => $this->_messages
             )
         );
     }
+
 }

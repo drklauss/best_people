@@ -1,0 +1,15 @@
+<table class="table table-hover table-responsive">
+    {#<tr>#}
+        {#<th>Date</th>#}
+        {#<th>Nickname</th>#}
+        {#<th>Vote</th>#}
+    {#</tr>#}
+    {% for vote in votesHistory %}
+        <tr class="{% if vote.isGoodVote %}success{% else %}danger{% endif %}">
+            <td>{{ vote.date|date("d F Y") }}</td>
+            <td><a href="/user/{{ vote.fromUserId }}">{{ vote.fromUser }}</a></td>
+            <td>voted {% if vote.isGoodVote %}positivly{% else %}negativly{% endif %}</td>
+        </tr>
+    {% endfor %}
+</table>
+

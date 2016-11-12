@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="messages")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MessagesRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Messages
 {
@@ -23,13 +24,13 @@ class Messages
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
-     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id", nullable=false)
      */
     private $fromUserId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
-     * @ORM\JoinColumn(name="toUserId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="toUserId", referencedColumnName="id", nullable=false)
      */
     private $toUserId;
 
@@ -46,13 +47,6 @@ class Messages
      * @ORM\Column(name="date", type="date")
      */
     private $date;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Users", inversedBy="id")
-     * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
-     */
-    private $messageFromUser;
-
 
     /**
      * Get id
@@ -85,6 +79,17 @@ class Messages
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function setDateTimeNow()
+    {
+        if ($this->getDate() == null) {
+            $this->date = new \DateTime('now');
+        }
     }
 
     /**
@@ -156,26 +161,4 @@ class Messages
         return $this->toUserId;
     }
 
-    /**
-     * Set messageFromUser
-     *
-     * @param \AppBundle\Entity\Users $messageFromUser
-     * @return Messages
-     */
-    public function setMessageFromUser(\AppBundle\Entity\Users $messageFromUser = null)
-    {
-        $this->messageFromUser = $messageFromUser;
-
-        return $this;
-    }
-
-    /**
-     * Get messageFromUser
-     *
-     * @return \AppBundle\Entity\Users 
-     */
-    public function getMessageFromUser()
-    {
-        return $this->messageFromUser;
-    }
 }

@@ -19,19 +19,20 @@ define(['jquery', 'bootstrap'], function () {
          * Send Form
          */
         sendForm: function () {
-            $('#jsLoginBtn').on('click touchstart', function (event) {
+            var loginBtn = $('#jsLoginBtn');
+            loginBtn.on('click touchstart', function (event) {
                 event.preventDefault();
                 login.removeFormErrors();
                 var $form = $('#jsLoginForm');
                 login.validateForm($form);
                 if (formIsValid) {
-                    $('#jsLoginBtn').attr('disabled', true);
+                    loginBtn.attr('disabled', true);
                     $.ajax({
                         url: '/login/user',
                         method: 'POST',
                         data: $form.serialize(),
                         success: function (result) {
-                            $('#jsLoginBtn').attr('disabled', false);
+
                             if (result['isError'] == false) {
                                 swal({
                                     title: 'Successfully login!',
@@ -58,7 +59,10 @@ define(['jquery', 'bootstrap'], function () {
                             // console.log(result);
                         }
 
-                    });
+                    })
+                        .always(function () {
+                            loginBtn.attr('disabled', false);
+                        });
                 } else {
                     swal({
                         title: 'Oohhh...',

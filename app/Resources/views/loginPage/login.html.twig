@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="col-sm-2">
-            {{ render( controller( 'AppBundle:RenderPages:renderLoginRegisterBlock', {'page' : 'login'} )) }}
+            {% include 'loginPage/userInfoBlock.html.twig' %}
         </div>
     </div>
     <div class="row">
