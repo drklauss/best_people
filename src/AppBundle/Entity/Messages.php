@@ -26,13 +26,13 @@ class Messages
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
      * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id", nullable=false)
      */
-    private $fromUserId;
+    private $fromUser;
 
     /**
      * @ORM\ManyToOne(targetEntity="Users", inversedBy="messages")
      * @ORM\JoinColumn(name="toUserId", referencedColumnName="id", nullable=false)
      */
-    private $toUserId;
+    private $toUser;
 
     /**
      * @var string
@@ -115,50 +115,54 @@ class Messages
         return $this->date;
     }
 
+   
+
+
     /**
-     * Set fromUserId
+     * Set fromUser
      *
-     * @param \AppBundle\Entity\Users $fromUserId
+     * @param \AppBundle\Entity\Users $fromUser
+     *
      * @return Messages
      */
-    public function setFromUserId(\AppBundle\Entity\Users $fromUserId = null)
+    public function setFromUser(\AppBundle\Entity\Users $fromUser)
     {
-        $this->fromUserId = $fromUserId;
+        $this->fromUser = $fromUser;
 
         return $this;
     }
 
     /**
-     * Get fromUserId
+     * Get fromUser
      *
-     * @return \AppBundle\Entity\Users 
+     * @return \AppBundle\Entity\Users
      */
-    public function getFromUserId()
+    public function getFromUser()
     {
-        return $this->fromUserId;
+        return $this->fromUser;
     }
 
     /**
-     * Set toUserId
+     * Set toUser
      *
-     * @param \AppBundle\Entity\Users $toUserId
+     * @param \AppBundle\Entity\Users $toUser
+     *
      * @return Messages
      */
-    public function setToUserId(\AppBundle\Entity\Users $toUserId = null)
+    public function setToUser(\AppBundle\Entity\Users $toUser)
     {
-        $this->toUserId = $toUserId;
+        $this->toUser = $toUser;
 
         return $this;
     }
 
     /**
-     * Get toUserId
+     * Get toUser
      *
-     * @return \AppBundle\Entity\Users 
+     * @return \AppBundle\Entity\Users
      */
-    public function getToUserId()
+    public function getToUser()
     {
-        return $this->toUserId;
+        return $this->toUser;
     }
-
 }

@@ -49,8 +49,8 @@ class MessagesController extends BaseController
     private function saveMessage(Users $fromUser, Users $toUser, $comment)
     {
         $message = new Messages();
-        $message->setFromUserId($fromUser);
-        $message->setToUserId($toUser);
+        $message->setFromUser($fromUser);
+        $message->setToUser($toUser);
         $message->setBody($comment);
         $this->save($message);
     }

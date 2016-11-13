@@ -16,20 +16,22 @@ class Votes
 {
 
     /**
+     * @var int
+     *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="fromUserVotes")
      * @ORM\JoinColumn(name="fromUserId", referencedColumnName="id")
      */
-    private $fromUserId;
+    private $fromUser;
 
     /**
      * @var int
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Users", inversedBy="votes")
+     * @ORM\ManyToOne(targetEntity="Users", inversedBy="toUserVotes")
      * @ORM\JoinColumn(name="toUserId", referencedColumnName="id")
      */
-    private $toUserId;
+    private $toUser;
 
     /**
      * @var bool
@@ -79,10 +81,12 @@ class Votes
         return $this->isGoodVote;
     }
 
+ 
     /**
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Votes
      */
     public function setDate($date)
@@ -103,48 +107,50 @@ class Votes
     }
 
     /**
-     * Set fromUserId
+     * Set fromUser
      *
-     * @param \AppBundle\Entity\Users $fromUserId
+     * @param \AppBundle\Entity\Users $fromUser
+     *
      * @return Votes
      */
-    public function setFromUserId(\AppBundle\Entity\Users $fromUserId)
+    public function setFromUser(\AppBundle\Entity\Users $fromUser)
     {
-        $this->fromUserId = $fromUserId;
+        $this->fromUser = $fromUser;
 
         return $this;
     }
 
     /**
-     * Get fromUserId
+     * Get fromUser
      *
      * @return \AppBundle\Entity\Users
      */
-    public function getFromUserId()
+    public function getFromUser()
     {
-        return $this->fromUserId;
+        return $this->fromUser;
     }
 
     /**
-     * Set toUserId
+     * Set toUser
      *
-     * @param \AppBundle\Entity\Users $toUserId
+     * @param \AppBundle\Entity\Users $toUser
+     *
      * @return Votes
      */
-    public function setToUserId(\AppBundle\Entity\Users $toUserId)
+    public function setToUser(\AppBundle\Entity\Users $toUser)
     {
-        $this->toUserId = $toUserId;
+        $this->toUser = $toUser;
 
         return $this;
     }
 
     /**
-     * Get toUserId
+     * Get toUser
      *
      * @return \AppBundle\Entity\Users
      */
-    public function getToUserId()
+    public function getToUser()
     {
-        return $this->toUserId;
+        return $this->toUser;
     }
 }

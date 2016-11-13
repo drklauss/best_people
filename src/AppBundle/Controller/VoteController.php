@@ -53,8 +53,8 @@ class VoteController extends BaseController
 
     /**
      * Checks if user can vote or not
-     * @param $fromUserId
-     * @param $toUserId
+     * @param int $fromUserId
+     * @param int $toUserId
      * @return bool
      */
     private function canVote($fromUserId, $toUserId)
@@ -69,9 +69,9 @@ class VoteController extends BaseController
 
     /**
      * Add vote into Votes
-     * @param $fromUserId
-     * @param $toUserId
-     * @param $isGoodVote
+     * @param int $fromUserId
+     * @param int $toUserId
+     * @param bool $isGoodVote
      */
     private function addVote($fromUserId, $toUserId, $isGoodVote)
     {
@@ -81,8 +81,8 @@ class VoteController extends BaseController
         if ($fromUser && $toUser) {
             $vote = new Votes();
             $vote->setIsGoodVote($isGoodVote);
-            $vote->setFromUserId($fromUser);
-            $vote->setToUserId($toUser);
+            $vote->setFromUser($fromUser);
+            $vote->setToUser($toUser);
             $em = $this->getDoctrine()->getManager();
             $em->persist($vote);
             $em->flush();

@@ -74,13 +74,19 @@ class Users
     private $avatarLink;
 
     /**
-     * @ORM\OneToMany(targetEntity="Votes", mappedBy="toUserId")
+     * @ORM\OneToMany(targetEntity="Votes", mappedBy="toUser")
      */
 
-    private $votes;
+    private $toUserVotes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Messages", mappedBy="toUserId")
+     * @ORM\OneToMany(targetEntity="Votes", mappedBy="fromUser")
+     */
+
+    private $fromUserVotes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Messages", mappedBy="toUser")
      */
 
     private $messages;
@@ -309,16 +315,6 @@ class Users
     }
 
     /**
-     * Get votes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVotes()
-    {
-        return $this->votes;
-    }
-
-    /**
      * Add messages
      *
      * @param \AppBundle\Entity\Messages $messages
@@ -349,5 +345,97 @@ class Users
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Set avatarLink
+     *
+     * @param string $avatarLink
+     *
+     * @return Users
+     */
+    public function setAvatarLink($avatarLink)
+    {
+        $this->avatarLink = $avatarLink;
+
+        return $this;
+    }
+
+    /**
+     * Get avatarLink
+     *
+     * @return string
+     */
+    public function getAvatarLink()
+    {
+        return $this->avatarLink;
+    }
+
+    /**
+     * Add toUserVote
+     *
+     * @param \AppBundle\Entity\Votes $toUserVote
+     *
+     * @return Users
+     */
+    public function addToUserVote(\AppBundle\Entity\Votes $toUserVote)
+    {
+        $this->toUserVotes[] = $toUserVote;
+
+        return $this;
+    }
+
+    /**
+     * Remove toUserVote
+     *
+     * @param \AppBundle\Entity\Votes $toUserVote
+     */
+    public function removeToUserVote(\AppBundle\Entity\Votes $toUserVote)
+    {
+        $this->toUserVotes->removeElement($toUserVote);
+    }
+
+    /**
+     * Get toUserVotes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getToUserVotes()
+    {
+        return $this->toUserVotes;
+    }
+
+    /**
+     * Add fromUserVote
+     *
+     * @param \AppBundle\Entity\Votes $fromUserVote
+     *
+     * @return Users
+     */
+    public function addFromUserVote(\AppBundle\Entity\Votes $fromUserVote)
+    {
+        $this->fromUserVotes[] = $fromUserVote;
+
+        return $this;
+    }
+
+    /**
+     * Remove fromUserVote
+     *
+     * @param \AppBundle\Entity\Votes $fromUserVote
+     */
+    public function removeFromUserVote(\AppBundle\Entity\Votes $fromUserVote)
+    {
+        $this->fromUserVotes->removeElement($fromUserVote);
+    }
+
+    /**
+     * Get fromUserVotes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFromUserVotes()
+    {
+        return $this->fromUserVotes;
     }
 }

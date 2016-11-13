@@ -8,10 +8,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Messages;
 use AppBundle\Entity\Users;
 use AppBundle\Entity\Votes;
 use AppBundle\Utils\SessionService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,47 +28,59 @@ class UserController extends BaseController
      */
     protected function setPersonalData(Users $user, $authUserId)
     {
-        // set messages here too
-        $this->_messages = array(
-            array(
-                'name' => 'lila',
-                'message' => 'hahaha'
-            ),
-            array(
-                'name' => 'Nick',
-                'message' => 'WOW'
-            )
-        );
-        $votesArray = $user->getVotes()->getValues();
+        $messagesArray = $user->getMessages()->getValues();
+        $votesArray = $user->getToUserVotes()->getValues();
+        $this->setVotesHistory($votesArray, $authUserId);
+        $this->setMessagesHistory($messagesArray);
+
+    }
+
+    /**
+     * Set Message into Messages Array for selected user
+     * @param array Messages $messagesArray
+     */
+    private function setMessagesHistory($messagesArray)
+    {
+        foreach ($messagesArray as $message){
+            /**
+             * @var Messages $message
+             * @var Users $fromUser
+             */
+            $this->_messages[] = array(
+                'date' => $message->getDate(),
+                'fromUser' => $message->getFromUser()->getNickname(),
+                'messageBody' => $message->getBody(),
+            );
+        }
+    }
+
+    /**
+     * Set Vote into Votes History array for selected user
+     * Also set isGoodVote for logged user
+     * @param array Votes $votesArray
+     * @param int $authUserId
+     */
+    private function setVotesHistory($votesArray, $authUserId)
+    {
         foreach ($votesArray as $vote) {
             /**
-             * @var $vote Votes
+             * @var Votes $vote
+             * @var Users $fromUser
              */
-            $this->setVotesHistory($vote);
-            if ($authUserId == $vote->getFromUserId()->getId()) {
+
+            $this->_votesHistory[] = array(
+                'date' => $vote->getDate(),
+                'fromUser' => $vote->getFromUser()->getNickname(),
+                'fromUserId' => $vote->getFromUser()->getId(),
+                'isGoodVote' => $vote->getIsGoodVote()
+            );
+            if ($authUserId == $vote->getFromUser()->getId()) {
                 $this->_isGoodVote = $vote->getIsGoodVote();
                 $this->_isVoted = true;
             }
             $vote->getIsGoodVote() ? $this->_karma++ : $this->_karma--;
         }
-    }
 
-    /**
-     * Get Votes History for selected user
-     * @param Votes $vote
-     */
-    private function setVotesHistory(Votes $vote)
-    {
-        /**
-         * @var Users $fromUser
-         */
-        $fromUser = $this->getDoctrine()->getRepository('AppBundle:Users')->find($vote->getFromUserId());
-        $this->_votesHistory[] = array(
-            'date' => $vote->getDate(),
-            'fromUser' => $fromUser->getNickname(),
-            'fromUserId' => $fromUser->getId(),
-            'isGoodVote' => $vote->getIsGoodVote()
-        );
     }
 
     /**

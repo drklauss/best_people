@@ -35,13 +35,13 @@ class SessionService
      * Set User data in Session
      * @param $user Users
      */
-    public function setUserData($user)
+    public function setUserData(Users $user)
     {
         $this->_session->set('id', $user->getId());
         $this->_session->set('nickname', $user->getNickname());
         $this->_session->set('isLogin', true);
         $karma = 0;
-        $votesArray = $user->getVotes()->getValues();
+        $votesArray = $user->getToUserVotes()->getValues();
         foreach ($votesArray as $vote) {
             /**
              * @var $vote Votes
