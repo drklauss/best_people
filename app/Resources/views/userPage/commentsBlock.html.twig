@@ -1,4 +1,18 @@
-{{ dump(messages) }}
-{% for message in messages %}
-    
-{% endfor %}
+{#{{ dump(messages) }}#}
+{% if messages %}
+    {% for message in messages %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a href="/user/{{ message.fromUserId }}">{{ message.fromUser }}</a>
+                wrote {{ message.date|date("d F Y") }}
+            </div>
+            <div class="panel-body">
+                {{ message.messageBody|raw }}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+<h4 style="text-align: center">
+    <i class="fa fa-frown-o fa-lg" aria-hidden="true"></i> Noone left comments here yet...
+</h4>
+{% endif %}

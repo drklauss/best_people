@@ -20,7 +20,7 @@
             {% if hasUser %}
                 {% include 'userPage/userDetailBlock.html.twig' %}
                 <div class="page-header">
-                    <h3>History</h3>
+                    <h3>Votes History</h3>
                 </div>
                 {% include 'userPage/votesBlock.html.twig' %}
                 <div class="page-header">
@@ -29,9 +29,13 @@
                 {% include 'userPage/commentsBlock.html.twig' %}
             {% endif %}
             {% if hasUser and sessionData.isLogin %}
+                <div class="page-header">
+                    <h3>Send Comment</h3>
+                </div>
                 {% include 'userPage/commentsFormBlock.html.twig' %}
             {% endif %}
         </div>
+
     </div>
     {% verbatim %}
         <script >

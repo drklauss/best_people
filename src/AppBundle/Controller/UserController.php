@@ -49,6 +49,7 @@ class UserController extends BaseController
             $this->_messages[] = array(
                 'date' => $message->getDate(),
                 'fromUser' => $message->getFromUser()->getNickname(),
+                'fromUserId' => $message->getFromUser()->getId(),
                 'messageBody' => $message->getBody(),
             );
         }
