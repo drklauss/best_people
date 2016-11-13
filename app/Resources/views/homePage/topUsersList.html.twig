@@ -26,7 +26,7 @@
                 </a>
             </div>
             <div class="item js-karma">
-                <h2>karma: {{ user.karma }}</h2>
+                <h2><img src={{ "public/assets/images/in_yan.png"|imagine_filter('karma') }} alt="">  {{ user.karma }}</h2>
             </div>
             <div class="item pull-right">
                 <div class="btn-group-vertical vote-action" data-id="{{ user.id }}" role="group">

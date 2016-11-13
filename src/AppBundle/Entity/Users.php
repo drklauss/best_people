@@ -89,7 +89,13 @@ class Users
      * @ORM\OneToMany(targetEntity="Messages", mappedBy="toUser")
      */
 
-    private $messages;
+    private $toUserMessages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Messages", mappedBy="fromUser")
+     */
+
+    private $fromUserMessages;
 
     /**
      * @Assert\Image(maxSize="1M")
@@ -203,14 +209,6 @@ class Users
         return $avatarsDir;
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -314,38 +312,6 @@ class Users
         $this->votes->removeElement($votes);
     }
 
-    /**
-     * Add messages
-     *
-     * @param \AppBundle\Entity\Messages $messages
-     * @return Users
-     */
-    public function addMessage(\AppBundle\Entity\Messages $messages)
-    {
-        $this->messages[] = $messages;
-
-        return $this;
-    }
-
-    /**
-     * Remove messages
-     *
-     * @param \AppBundle\Entity\Messages $messages
-     */
-    public function removeMessage(\AppBundle\Entity\Messages $messages)
-    {
-        $this->messages->removeElement($messages);
-    }
-
-    /**
-     * Get messages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMessages()
-    {
-        return $this->messages;
-    }
 
     /**
      * Set avatarLink
@@ -438,4 +404,83 @@ class Users
     {
         return $this->fromUserVotes;
     }
+
+    /**
+     * Add toUserMessage
+     *
+     * @param \AppBundle\Entity\Messages $toUserMessage
+     *
+     * @return Users
+     */
+    public function addToUserMessage(\AppBundle\Entity\Messages $toUserMessage)
+    {
+        $this->toUserMessages[] = $toUserMessage;
+
+        return $this;
+    }
+
+    /**
+     * Remove toUserMessage
+     *
+     * @param \AppBundle\Entity\Messages $toUserMessage
+     */
+    public function removeToUserMessage(\AppBundle\Entity\Messages $toUserMessage)
+    {
+        $this->toUserMessages->removeElement($toUserMessage);
+    }
+
+    /**
+     * Get toUserMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getToUserMessages()
+    {
+        return $this->toUserMessages;
+    }
+
+    /**
+     * Add fromUserMessage
+     *
+     * @param \AppBundle\Entity\Messages $fromUserMessage
+     *
+     * @return Users
+     */
+    public function addFromUserMessage(\AppBundle\Entity\Messages $fromUserMessage)
+    {
+        $this->fromUserMessages[] = $fromUserMessage;
+
+        return $this;
+    }
+
+    /**
+     * Remove fromUserMessage
+     *
+     * @param \AppBundle\Entity\Messages $fromUserMessage
+     */
+    public function removeFromUserMessage(\AppBundle\Entity\Messages $fromUserMessage)
+    {
+        $this->fromUserMessages->removeElement($fromUserMessage);
+    }
+
+    /**
+     * Get fromUserMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFromUserMessages()
+    {
+        return $this->fromUserMessages;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->toUserVotes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fromUserVotes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->toUserMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fromUserMessages = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 }

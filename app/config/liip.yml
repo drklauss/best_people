@@ -6,3 +6,8 @@ liip_imagine:
                 thumbnail:
                     size: [64, 64]
                     mode: outbound
+        karma:
+            filters:
+                thumbnail:
+                    size: [32, 32]
+                    mode: outbound

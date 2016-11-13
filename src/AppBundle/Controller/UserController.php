@@ -28,7 +28,7 @@ class UserController extends BaseController
      */
     protected function setPersonalData(Users $user, $authUserId)
     {
-        $messagesArray = $user->getMessages()->getValues();
+        $messagesArray = $user->getToUserMessages()->getValues();
         $votesArray = $user->getToUserVotes()->getValues();
         $this->setVotesHistory($votesArray, $authUserId);
         $this->setMessagesHistory($messagesArray);

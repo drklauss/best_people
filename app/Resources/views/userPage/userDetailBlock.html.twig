@@ -27,7 +27,7 @@
             {% endif %}
         </div>
         <div class="item js-karma">
-            <h2>{{ discoverUserData.karma }}</h2>
+            <h2><img src={{ "public/assets/images/in_yan.png"|imagine_filter('karma') }} alt=""> {{ discoverUserData.karma }}</h2>
         </div>
         <div class="item pull-right">
             <div class="btn-group-vertical vote-action" data-id="{{ discoverUserData.id }}" role="group">

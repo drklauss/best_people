@@ -5,7 +5,7 @@
         <div class="col-sm-4 col-sm-offset-3">
             <div class="page-header">
                 {% if hasUser %}
-                    <h2>Personal Information</h2>
+                    <h2><i class="fa fa-info" aria-hidden="true"></i> Personal Information</h2>
                 {% else %}
                     <h2><i class="fa fa-frown-o fa-lg" aria-hidden="true"></i> The user is not found</h2>
                 {% endif %}
@@ -20,17 +20,17 @@
             {% if hasUser %}
                 {% include 'userPage/userDetailBlock.html.twig' %}
                 <div class="page-header">
-                    <h3>Votes History</h3>
+                    <h3><i class="fa fa-commenting-o" aria-hidden="true"></i> Votes History</h3>
                 </div>
                 {% include 'userPage/votesBlock.html.twig' %}
                 <div class="page-header">
-                    <h3>Comments</h3>
+                    <h3><i class="fa fa-comments-o" aria-hidden="true"></i> Comments</h3>
                 </div>
                 {% include 'userPage/commentsBlock.html.twig' %}
             {% endif %}
             {% if hasUser and sessionData.isLogin %}
                 <div class="page-header">
-                    <h3>Send Comment</h3>
+                    <h3><i class="fa fa-paper-plane" aria-hidden="true"></i> Send Comment</h3>
                 </div>
                 {% include 'userPage/commentsFormBlock.html.twig' %}
             {% endif %}

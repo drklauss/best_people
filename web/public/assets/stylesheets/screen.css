@@ -47,3 +47,7 @@
 .medium-editor-element {
     min-height: 80px !important;
 }
+
+.message-body {
+    word-wrap: break-word;
+}
