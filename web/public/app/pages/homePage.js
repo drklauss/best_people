@@ -11,6 +11,7 @@ define(['jquery', 'bootstrap'], function () {
         sendVote: function () {
             $('.vote-action').on('click touchstart', 'button', function (event) {
                 event.preventDefault();
+                console.log('ffff');
                 var $voteBtn = $(this);
                 $voteBtn.parent().find('button').attr('disabled', true);
                 $voteBtn.find('i').addClass('fa-circle-o-notch fa-spin');

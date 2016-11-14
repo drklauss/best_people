@@ -2,12 +2,12 @@
     {# Add bold plus or minus to voted  button #}
     {% set plusClass = 'btn-default' %}
     {% set minusClass = 'btn-default' %}
+
     {% if user.isGoodVote is not null and user.isGoodVote %}
         {% set plusClass = 'btn-primary' %}
     {% elseif user.isGoodVote is not null and not user.isGoodVote %}
         {% set minusClass = 'btn-primary' %}
     {% endif %}
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
@@ -31,16 +31,16 @@
             <div class="item pull-right">
                 <div class="btn-group-vertical vote-action" data-id="{{ user.id }}" role="group">
                     <button type="button"
-                            class="btn {{ plusClass }} vote-up {% if user.isVoted or user.id == authUserId %}disabled{% endif %}"
+                            class="btn {{ plusClass }} vote-up {% if user.isGoodVote or user.id == authUserId %}disabled{% endif %}"
                             data-toggle="tooltip" data-placement="right" title="Increase karma"
-                            {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
+                            {% if user.isGoodVote or user.id == authUserId %}disabled="disabled"{% endif %}
                     >
                         <i class="fa fa-plus-square" aria-hidden="true"></i>
                     </button>
                     <button type="button"
-                            class="btn {{ minusClass }} vote-down {% if user.isVoted or user.id == authUserId %}disabled{% endif %}"
+                            class="btn {{ minusClass }} vote-down {% if not user.isGoodVote or user.id == authUserId %}disabled{% endif %}"
                             data-toggle="tooltip" data-placement="right" title="Decrease karma"
-                            {% if user.isVoted or user.id == authUserId %}disabled="disabled"{% endif %}
+                            {% if not user.isGoodVote or user.id == authUserId %}disabled="disabled"{% endif %}
                     >
                         <i class="fa fa-minus-square" aria-hidden="true"></i>
                     </button>

@@ -24,7 +24,6 @@ class LoginController extends BaseController
          */
         if ($user) {
             $sessionService = new SessionService();
-            // todo: work with session service
             $sessionService->setUserData($user);
         };
         return $this->getErrorsJsonResult();
@@ -47,10 +46,10 @@ class LoginController extends BaseController
 
     /**
      * Try to login a user
-     * @param object $user User
+     * @param Users $user
      * @return bool
      */
-    protected function loginTry($user)
+    protected function loginTry(Users $user)
     {
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $isBadCaptcha = !$this->isGoodCaptcha($this->_captcha);

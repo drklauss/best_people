@@ -12,7 +12,7 @@
             {{ discoverUserData.nickname }}
             <div class="pull-right">
                 {% if sessionData.isLogin and discoverUserData.id == loginedUserInfo.id  %}
-                    <a href="/user/edit/{{ loginedUserInfo.id }}" class="edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="/profile/{{ loginedUserInfo.id }}" class="edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 {% endif %}
             </div>
         </h3>
@@ -32,16 +32,16 @@
         <div class="item pull-right">
             <div class="btn-group-vertical vote-action" data-id="{{ discoverUserData.id }}" role="group">
                 <button type="button"
-                        class="btn {{ plusClass }} vote-up {% if discoverUserData.isVoted or discoverUserData.id == loginedUserInfo.id %}disabled{% endif %}"
+                        class="btn {{ plusClass }} vote-up {% if discoverUserData.isGoodVote or discoverUserData.id == loginedUserInfo.id %}disabled{% endif %}"
                         data-toggle="tooltip" data-placement="right" title="Increase karma"
-                        {% if discoverUserData.isVoted or discoverUserData.id == loginedUserInfo.id %}disabled="disabled"{% endif %}
+                        {% if discoverUserData.isGoodVote or discoverUserData.id == loginedUserInfo.id %}disabled="disabled"{% endif %}
                 >
                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                 </button>
                 <button type="button"
-                        class="btn {{ minusClass }} vote-down {% if discoverUserData.isVoted or discoverUserData.id == loginedUserInfo.id %}disabled{% endif %}"
+                        class="btn {{ minusClass }} vote-down {% if not discoverUserData.isGoodVote or discoverUserData.id == loginedUserInfo.id %}disabled{% endif %}"
                         data-toggle="tooltip" data-placement="right" title="Decrease karma"
-                        {% if discoverUserData.isVoted or discoverUserData.id == loginedUserInfo.id %}disabled="disabled"{% endif %}
+                        {% if not discoverUserData.isGoodVote or discoverUserData.id == loginedUserInfo.id %}disabled="disabled"{% endif %}
                 >
                     <i class="fa fa-minus-square" aria-hidden="true"></i>
                 </button>

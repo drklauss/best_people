@@ -35,7 +35,6 @@ class RenderPagesController extends UserController
     {
         $sessionService = new SessionService();
         $sessionData = $sessionService->getSessionData();
-        // replace this example code with whatever you need
         return $this->render('homePage/home.html.twig',
             array(
                 'sessionData' => $sessionData
@@ -45,7 +44,7 @@ class RenderPagesController extends UserController
 
     /**
      * @Route("/user/{userId}", name="personalPage", requirements={"userId": "\d+"})
-     * @param $userId int
+     * @param int $userId
      * @return Response
      */
     public function renderPersonalPageAction($userId)
@@ -58,13 +57,13 @@ class RenderPagesController extends UserController
         $userData = array();
         if ($user) {
             $hasUser = true;
-            $this->setPersonalData($user, $authUserId);
+            $this->setVotesHistory($user, $authUserId);
+            $this->setMessagesHistory($user);
             $userData = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
                 'karma' => $this->_karma,
                 'image' => $user->getWebPath(),
-                'isVoted' => $this->_isVoted,
                 'isGoodVote' => $this->_isGoodVote
 
             );
@@ -78,6 +77,30 @@ class RenderPagesController extends UserController
                 'messages' => $this->_messages
             )
         );
+    }
+
+    /**
+     * @Route("/profile", name="profilePage")
+     * @return Response
+     */
+    public function renderProfileAction()
+    {
+
+        $sessionService = new SessionService();
+        $sessionData = $sessionService->getSessionData();
+        if ($sessionData['isLogin']) {
+
+            return $this->render('profilePage/profile.html.twig',
+                array(
+                    'sessionData' => $sessionData,
+//                    'image' =>
+                )
+            );
+        } else {
+            return $this->redirectToRoute('homePage');
+        }
+
+
     }
 
 }

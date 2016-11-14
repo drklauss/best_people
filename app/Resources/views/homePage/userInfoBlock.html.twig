@@ -8,7 +8,7 @@
         <a href="/" class="list-group-item">
             <i class="fa fa-home" aria-hidden="true"></i> Home
         </a>
-        <a href="/user/{{ sessionData.userData.id }}" class="list-group-item">
+        <a href="/profile" class="list-group-item">
             <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname }}
             <span class="badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
         </a>

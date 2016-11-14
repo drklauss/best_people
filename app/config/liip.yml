@@ -9,5 +9,5 @@ liip_imagine:
         karma:
             filters:
                 thumbnail:
-                    size: [32, 32]
+                    size: [28, 28]
                     mode: outbound

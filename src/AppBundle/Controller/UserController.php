@@ -22,25 +22,12 @@ class UserController extends BaseController
 {
 
     /**
-     * Calculate user votes and karma
-     * @param int $authUserId
-     * @param Users $user
+     * Set Message into Messages Array for selected user
+     * @param object Users $user
      */
-    protected function setPersonalData(Users $user, $authUserId)
+    protected function setMessagesHistory(Users $user)
     {
         $messagesArray = $user->getToUserMessages()->getValues();
-        $votesArray = $user->getToUserVotes()->getValues();
-        $this->setVotesHistory($votesArray, $authUserId);
-        $this->setMessagesHistory($messagesArray);
-
-    }
-
-    /**
-     * Set Message into Messages Array for selected user
-     * @param array Messages $messagesArray
-     */
-    private function setMessagesHistory($messagesArray)
-    {
         foreach ($messagesArray as $message){
             /**
              * @var Messages $message
@@ -58,11 +45,15 @@ class UserController extends BaseController
     /**
      * Set Vote into Votes History array for selected user
      * Also set isGoodVote for logged user
-     * @param array Votes $votesArray
+     * @param object Users $user
      * @param int $authUserId
      */
-    private function setVotesHistory($votesArray, $authUserId)
+    protected function setVotesHistory(Users $user, $authUserId)
     {
+        // reset to default values
+        $this->_karma = 0;
+        $this->_isGoodVote = null;
+        $votesArray = $user->getToUserVotes()->getValues();
         foreach ($votesArray as $vote) {
             /**
              * @var Votes $vote
@@ -77,7 +68,6 @@ class UserController extends BaseController
             );
             if ($authUserId == $vote->getFromUser()->getId()) {
                 $this->_isGoodVote = $vote->getIsGoodVote();
-                $this->_isVoted = true;
             }
             $vote->getIsGoodVote() ? $this->_karma++ : $this->_karma--;
         }
@@ -99,16 +89,17 @@ class UserController extends BaseController
          * @var Users $user
          */
         foreach ($usersRepository->findAll() as $user) {
-            $this->setPersonalData($user, $authUserId);
+
+            $this->setVotesHistory($user, $authUserId);
             $usersListData[] = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
                 'karma' => $this->_karma,
                 'image' => $user->getWebPath(),
-                'isVoted' => $this->_isVoted,
                 'isGoodVote' => $this->_isGoodVote
 
             );
+
         }
         $sortedUsersListData = $this->arraySort($usersListData);
         return $this->render('homePage/topUsersList.html.twig',
@@ -118,6 +109,10 @@ class UserController extends BaseController
             )
         );
     }
+
+    /**
+     *
+     */
 
     /**
      * Sort users by karma parameter

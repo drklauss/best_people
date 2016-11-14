@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Users;
 use AppBundle\Entity\Votes;
 use AppBundle\Utils\SessionService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,11 +39,7 @@ class VoteController extends BaseController
             $this->addError('You cannot vote for yourself!', 'voteError');
         } else {
             if ($sessionData['isLogin'] == true) {
-                if ($this->canVote($fromUserId, $toUserId)) {
-                    $this->addVote($fromUserId, $toUserId, $isGoodVote);
-                } else {
-                    $this->addError('You already vote for this user!', 'voteError');
-                }
+                $this->addVote($fromUserId, $toUserId, $isGoodVote);
             } else {
                 $this->addError('You should login before vote!', 'voteError');
             }
@@ -51,21 +48,21 @@ class VoteController extends BaseController
         return $this->getErrorsJsonResult();
     }
 
-    /**
-     * Checks if user can vote or not
-     * @param int $fromUserId
-     * @param int $toUserId
-     * @return bool
-     */
-    private function canVote($fromUserId, $toUserId)
-    {
-        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
-        $hasVote = $votesRepository->findBy(array(
-            'fromUserId' => $fromUserId,
-            'toUserId' => $toUserId
-        ));
-        return !$hasVote;
-    }
+//    /**
+//     * Checks if user can vote or not
+//     * @param int $fromUserId
+//     * @param int $toUserId
+//     * @return bool
+//     */
+//    private function canVote($fromUserId, $toUserId)
+//    {
+//        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
+//        $hasVote = $votesRepository->findBy(array(
+//            'fromUser' => $fromUserId,
+//            'toUser' => $toUserId
+//        ));
+//        return !$hasVote;
+//    }
 
     /**
      * Add vote into Votes
@@ -78,15 +75,39 @@ class VoteController extends BaseController
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $fromUser = $usersRepository->find($fromUserId);
         $toUser = $usersRepository->find($toUserId);
-        if ($fromUser && $toUser) {
+        $vote = $this->checkVoters($fromUser, $toUser);
+
+        if (!$vote) {
             $vote = new Votes();
             $vote->setIsGoodVote($isGoodVote);
             $vote->setFromUser($fromUser);
             $vote->setToUser($toUser);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vote);
-            $em->flush();
+            $this->save($vote);
+        } else {
+//            dump($vote);
+//            dump($isGoodVote);
+//            exit;
+            $vote->setIsGoodVote($isGoodVote);
+            $this->save($vote);
         }
+    }
+
+    /**
+     * Check vote one user to another or not
+     * @param Users $fromUser
+     * @param Users $toUser
+     * @return Votes $vote
+     */
+    private function checkVoters(Users $fromUser, Users $toUser)
+    {
+        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
+        $vote = $votesRepository->findOneBy(
+            array(
+                'fromUser' => $fromUser,
+                'toUser' => $toUser
+            )
+        );
+        return $vote;
     }
 
     /**
@@ -99,10 +120,9 @@ class VoteController extends BaseController
     {
 
         $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
-
         $votesArray = $votesRepository->findBy(
             array(
-                'toUserId' => $userId
+                'toUser' => $userId
             )
         );
         $karma = 0;

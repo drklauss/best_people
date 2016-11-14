@@ -39,6 +39,7 @@ class SessionService
     {
         $this->_session->set('id', $user->getId());
         $this->_session->set('nickname', $user->getNickname());
+        $this->_session->set('avatarLink', $user->getWebPath());
         $this->_session->set('isLogin', true);
         $karma = 0;
         $votesArray = $user->getToUserVotes()->getValues();
@@ -64,6 +65,7 @@ class SessionService
         $userData = array(
             'id' => $this->_session->get('id'),
             'nickname' => $this->_session->get('nickname'),
+            'avatarLink' => $this->_session->get('avatarLink'),
             'gender' => $this->_session->get('gender'),
             'karma' => $this->_session->get('karma')
         );

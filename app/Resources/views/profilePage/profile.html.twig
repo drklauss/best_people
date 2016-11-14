@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ dump() }}
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-3">
+            <div class="page-header">
+                <h2>
+                    {% if  sessionData.userData.avatarLink %}
+                        <img src={{ sessionData.userData.avatarLink|imagine_filter('karma') }} class="img-thumbnail">
+                    {% else %}
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    {% endif %}
+                    Profile
+                </h2>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            {% include 'homePage/userInfoBlock.html.twig' %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            {% include 'profilePage/formBlock.html.twig' %}
+
+            {#{% include 'userPage/votesBlock.html.twig' %}#}
+            {#<div class="page-header">#}
+                {#<h3><i class="fa fa-comments-o" aria-hidden="true"></i> Comments</h3>#}
+            {#</div>#}
+            {#{% include 'userPage/commentsBlock.html.twig' %}#}
+        </div>
+    </div>
+    {% verbatim %}
+        <script >
+            var profilePage = true;
+        </script>
+    {% endverbatim %}
+{% endblock %}

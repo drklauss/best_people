@@ -54,10 +54,10 @@ class RegisterController extends BaseController
 
     /**
      * Validate a user
-     * @param object $user user
+     * @param Users $user
      * @return bool
      */
-    private function validateUser($user)
+    private function validateUser(Users $user)
     {
         $validator = $this->get('validator');
         /**

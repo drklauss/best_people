@@ -18,10 +18,7 @@ class BaseController extends Controller
      * @var array
      */
     protected $_votesHistory;
-    /**
-     * @var bool
-     */
-    protected $_isVoted = false;
+
     /**
      * @var bool
      */
@@ -120,7 +117,7 @@ class BaseController extends Controller
 
     /**
      * Validate reCaptcha in Google
-     * @param $params
+     * @param array $params
      * @return JsonResponse
      */
     protected function sendCaptcha($params)
