@@ -57,14 +57,14 @@ define(['jquery', 'bootstrap'], function () {
                             if (result['isError'] == false) {
                                 swal({
                                     title: 'Account created!',
-                                    text: 'Now you will be redirected to login form',
+                                    text: 'Now you will be redirected to your profile',
                                     showConfirmButton: false,
                                     type: 'success',
                                     timer: swalWaitTime
 
                                 });
                                 setTimeout(function () {
-                                    location.href = '/login';
+                                    location.href = '/profile';
                                 }, swalWaitTime);
                             } else {
                                 register.addFormErrors(result['errors']);

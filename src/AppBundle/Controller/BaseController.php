@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Users;
 use AppBundle\Entity\Votes;
+use AppBundle\Utils\SessionService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,11 +45,6 @@ class BaseController extends Controller
      */
     private $_errors;
 
-
-    function __construct()
-    {
-        $this->_errors['isError'] = false;
-    }
 
     /**
      * Get salt password
@@ -93,6 +89,7 @@ class BaseController extends Controller
      */
     protected function getErrorsJsonResult()
     {
+        $this->_errors['isError'] = $this->_errors['isError'] ? true : false;
         $response = new JsonResponse();
         $response->setData($this->_errors);
         return $response;
@@ -153,7 +150,16 @@ class BaseController extends Controller
         $em->flush();
     }
 
-
+    /**
+     * Need to inject doctrine into Session Service
+     * @return array
+     */
+    protected function getSessionServiceData()
+    {
+        $sessionService = new SessionService();
+        $sessionService->setDoctrine($this->getDoctrine());
+        return $sessionService->getSessionData();
+    }
 //    /**
 //     * @Route("/test")
 //     */

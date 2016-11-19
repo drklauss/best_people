@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Users;
+use AppBundle\Utils\SessionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\ImageValidator;
 use Symfony\Component\Validator\ConstraintViolationList;
+
 
 class RegisterController extends BaseController
 {
@@ -28,6 +30,9 @@ class RegisterController extends BaseController
             // saves user
             $user->setPassword($this->saltPassword($user->getPassword()));
             $this->save($user);
+            // set data to session
+            $sessionService = new SessionService();
+            $sessionService->setUserData($user);
         };
         return $this->getErrorsJsonResult();
     }

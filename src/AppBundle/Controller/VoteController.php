@@ -25,8 +25,7 @@ class VoteController extends BaseController
      */
     public function voteAction()
     {
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
+        $sessionData = $this->getSessionServiceData();
         $request = Request::createFromGlobals();
         $getRequest = $request->query;
         $fromUserId = $sessionData['userData']['id'];

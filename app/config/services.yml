@@ -6,4 +6,4 @@ parameters:
 services:
     session.service:
         class: AppBundle\Utils\SessionService
-
+        arguments: [@doctrine]

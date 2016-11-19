@@ -15,9 +15,14 @@ class RenderPagesController extends UserController
      * @Route("/register", name="registerPage")
      */
     public function renderRegisterPageAction()
+
     {
-        // todo if user is authorized -> offer him to logout first
-        return $this->render('registerPage/register.html.twig');
+        $sessionData = $this->getSessionServiceData();
+        if ($sessionData['isLogin']) {
+            return $this->redirectToRoute('homePage');
+        } else {
+            return $this->render('registerPage/register.html.twig');
+        }
     }
 
     /**
@@ -25,7 +30,12 @@ class RenderPagesController extends UserController
      */
     public function renderLoginPageAction()
     {
-        return $this->render('loginPage/login.html.twig');
+        $sessionData = $this->getSessionServiceData();
+        if ($sessionData['isLogin']) {
+            return $this->redirectToRoute('homePage');
+        } else {
+            return $this->render('loginPage/login.html.twig');
+        }
     }
 
     /**
@@ -33,8 +43,7 @@ class RenderPagesController extends UserController
      */
     public function renderIndexPageAction()
     {
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
+        $sessionData = $this->getSessionServiceData();
         return $this->render('homePage/home.html.twig',
             array(
                 'sessionData' => $sessionData
@@ -51,8 +60,7 @@ class RenderPagesController extends UserController
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
         $hasUser = false;
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
+        $sessionData = $this->getSessionServiceData();
         $authUserId = $sessionData['userData']['id'];
         $userData = array();
         if ($user) {
@@ -86,8 +94,7 @@ class RenderPagesController extends UserController
     public function renderProfileAction()
     {
 
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
+        $sessionData = $this->getSessionServiceData();
         if ($sessionData['isLogin']) {
 
             return $this->render('profilePage/profile.html.twig',

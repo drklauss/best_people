@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 class UserController extends BaseController
@@ -28,7 +29,7 @@ class UserController extends BaseController
     protected function setMessagesHistory(Users $user)
     {
         $messagesArray = $user->getToUserMessages()->getValues();
-        foreach ($messagesArray as $message){
+        foreach ($messagesArray as $message) {
             /**
              * @var Messages $message
              * @var Users $fromUser
@@ -80,8 +81,7 @@ class UserController extends BaseController
      */
     public function showTopUsersListAction()
     {
-        $sessionService = new SessionService();
-        $sessionData = $sessionService->getSessionData();
+        $sessionData = $this->getSessionServiceData();
         $authUserId = $sessionData['userData']['id'];
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
         $usersListData = array();
@@ -111,8 +111,13 @@ class UserController extends BaseController
     }
 
     /**
-     *
+     * @Route("/update_karma")
      */
+    public function updateKarmaAction()
+    {
+        $sessionServiceData = $this->getSessionServiceData();
+        return $this->getJsonResult($sessionServiceData);
+    }
 
     /**
      * Sort users by karma parameter
@@ -126,5 +131,6 @@ class UserController extends BaseController
         });
         return $array;
     }
+
 
 }

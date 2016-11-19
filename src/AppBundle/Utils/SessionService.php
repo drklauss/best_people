@@ -11,13 +11,15 @@ namespace AppBundle\Utils;
 
 use AppBundle\Entity\Users;
 use AppBundle\Entity\Votes;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+
 
 class SessionService
 {
     /**
-     * @var
+     * @var array
      */
     protected $_sessionData;
 
@@ -26,9 +28,24 @@ class SessionService
      */
     public $_session;
 
+    /**
+     * @var Registry
+     */
+    private $_doctrine;
+
+
     public function __construct()
     {
         $this->_session = new Session();
+    }
+
+    /**
+     * Doctrine DI from BaseController
+     * @param $doctrine
+     */
+    public function setDoctrine($doctrine)
+    {
+        $this->_doctrine = $doctrine;
     }
 
     /**
@@ -36,20 +53,14 @@ class SessionService
      * @param $user Users
      */
     public function setUserData(Users $user)
+
     {
         $this->_session->set('id', $user->getId());
         $this->_session->set('nickname', $user->getNickname());
         $this->_session->set('avatarLink', $user->getWebPath());
+        $this->_session->set('startTime', time());
         $this->_session->set('isLogin', true);
-        $karma = 0;
-        $votesArray = $user->getToUserVotes()->getValues();
-        foreach ($votesArray as $vote) {
-            /**
-             * @var $vote Votes
-             */
-            $vote->getIsGoodVote() ? $karma += 1 : $karma -= 1;
-        }
-        $this->_session->set('karma', $karma);
+        $this->getUserKarma($user);
         $userGender = $user->getIsFemale() ? 'Female' : 'Male';
         $this->_session->set('gender', $userGender);
 
@@ -62,6 +73,10 @@ class SessionService
      */
     public function getSessionData()
     {
+        $startSession = $this->_session->get('startTime');
+        if ($startSession && (time() - $startSession) > 60) {
+            $this->getUserKarma();
+        }
         $userData = array(
             'id' => $this->_session->get('id'),
             'nickname' => $this->_session->get('nickname'),
@@ -75,9 +90,30 @@ class SessionService
     }
 
     /**
+     * Get User karma
+     * @param Users|null $user
+     */
+    private function getUserKarma(Users $user = null)
+    {
+        if (!$user) {
+            $user = $this->_doctrine->getRepository('AppBundle:Users')->find($this->getUserId());
+        }
+        $karma = 0;
+        $votesArray = $user->getToUserVotes()->getValues();
+        foreach ($votesArray as $vote) {
+            /**
+             * @var $vote Votes
+             */
+            $vote->getIsGoodVote() ? $karma += 1 : $karma -= 1;
+        }
+        $this->_session->set('karma', $karma);
+    }
+
+    /**
      * @return int
      */
-    public function getUserId(){
+    public function getUserId()
+    {
         return $this->_session->get('id');
     }
 
