@@ -15,24 +15,7 @@ class BaseController extends Controller
 {
     const SALT = 'bestPeople';
 
-    /**
-     * @var array
-     */
-    protected $_votesHistory;
 
-    /**
-     * @var bool
-     */
-    protected $_isGoodVote = null;
-    /**
-     * @var int
-     */
-    protected $_karma = 0;
-
-    /**
-     * @var array
-     */
-    protected $_messages;
     /**
      * Google captcha
      * @var string
@@ -45,6 +28,15 @@ class BaseController extends Controller
      */
     private $_errors;
 
+    /**
+     * @var SessionService
+     */
+    protected $_sessionService;
+
+    public function __construct()
+    {
+        $this->_sessionService = new SessionService();
+    }
 
     /**
      * Get salt password
@@ -156,9 +148,8 @@ class BaseController extends Controller
      */
     protected function getSessionServiceData()
     {
-        $sessionService = new SessionService();
-        $sessionService->setDoctrine($this->getDoctrine());
-        return $sessionService->getSessionData();
+        $this->_sessionService->setDoctrine($this->getDoctrine());
+        return $this->_sessionService->getSessionData();
     }
 //    /**
 //     * @Route("/test")

@@ -47,22 +47,6 @@ class VoteController extends BaseController
         return $this->getErrorsJsonResult();
     }
 
-//    /**
-//     * Checks if user can vote or not
-//     * @param int $fromUserId
-//     * @param int $toUserId
-//     * @return bool
-//     */
-//    private function canVote($fromUserId, $toUserId)
-//    {
-//        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
-//        $hasVote = $votesRepository->findBy(array(
-//            'fromUser' => $fromUserId,
-//            'toUser' => $toUserId
-//        ));
-//        return !$hasVote;
-//    }
-
     /**
      * Add vote into Votes
      * @param int $fromUserId
@@ -83,9 +67,6 @@ class VoteController extends BaseController
             $vote->setToUser($toUser);
             $this->save($vote);
         } else {
-//            dump($vote);
-//            dump($isGoodVote);
-//            exit;
             $vote->setIsGoodVote($isGoodVote);
             $this->save($vote);
         }
@@ -109,35 +90,35 @@ class VoteController extends BaseController
         return $vote;
     }
 
-    /**
-     * Get User karma by its ID
-     * @param $userId
-     * @return JsonResponse
-     * @Route("/recalculate/{userId}", requirements={"userId" = "\d+"})
-     */
-    public function getUserKarmaAction($userId)
-    {
-
-        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
-        $votesArray = $votesRepository->findBy(
-            array(
-                'toUser' => $userId
-            )
-        );
-        $karma = 0;
-        foreach ($votesArray as $vote) {
-            /**
-             * @var $vote Votes
-             */
-            $vote->getIsGoodVote() ? $karma++ : $karma--;
-        }
-        $response = new JsonResponse();
-        $response->setData(
-            array(
-                'karma' => $karma
-            )
-        );
-        return $response;
-    }
+//    /**
+//     * Get User karma by its ID
+//     * @param $userId
+//     * @return JsonResponse
+//     * @Route("/recalculate/{userId}", requirements={"userId" = "\d+"})
+//     */
+//    public function getUserKarmaAction($userId)
+//    {
+//
+//        $votesRepository = $this->getDoctrine()->getRepository('AppBundle:Votes');
+//        $votesArray = $votesRepository->findBy(
+//            array(
+//                'toUser' => $userId
+//            )
+//        );
+//        $karma = 0;
+//        foreach ($votesArray as $vote) {
+//            /**
+//             * @var $vote Votes
+//             */
+//            $vote->getIsGoodVote() ? $karma++ : $karma--;
+//        }
+//        $response = new JsonResponse();
+//        $response->setData(
+//            array(
+//                'karma' => $karma
+//            )
+//        );
+//        return $response;
+//    }
 
 }

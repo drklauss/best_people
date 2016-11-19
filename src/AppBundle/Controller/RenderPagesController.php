@@ -2,13 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Users;
+use AppBundle\Utils\HistoryService;
 use AppBundle\Utils\SessionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Utils\SortService;
 
-class RenderPagesController extends UserController
+class RenderPagesController extends BaseController
 {
 
     /**
@@ -65,14 +68,14 @@ class RenderPagesController extends UserController
         $userData = array();
         if ($user) {
             $hasUser = true;
-            $this->setVotesHistory($user, $authUserId);
-            $this->setMessagesHistory($user);
+            HistoryService::setVotesHistory($user, $authUserId);
+            HistoryService::setMessagesHistory($user);
             $userData = array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
-                'karma' => $this->_karma,
+                'karma' => HistoryService::$_karma,
                 'image' => $user->getWebPath(),
-                'isGoodVote' => $this->_isGoodVote
+                'isGoodVote' => HistoryService::$_isGoodVote
 
             );
         }
@@ -81,8 +84,8 @@ class RenderPagesController extends UserController
                 'hasUser' => $hasUser,
                 'sessionData' => $sessionData,
                 'discoverUserData' => $userData,
-                'votesHistory' => $this->_votesHistory,
-                'messages' => $this->_messages
+                'votesHistory' => HistoryService::$_votesHistory,
+                'messages' => HistoryService::$_messages
             )
         );
     }
@@ -110,4 +113,39 @@ class RenderPagesController extends UserController
 
     }
 
+    /**
+     * @Route("/get_top_list")
+     * Shows top-15 users list
+     * @return Response
+     */
+    public function showTopUsersListAction()
+    {
+        $sessionData = $this->getSessionServiceData();
+        $authUserId = $sessionData['userData']['id'];
+        $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
+        $usersListData = array();
+        /**
+         * @var Users $user
+         */
+        foreach ($usersRepository->findAll() as $user) {
+
+            HistoryService::setVotesHistory($user, $authUserId);
+            $usersListData[] = array(
+                'id' => $user->getId(),
+                'nickname' => $user->getNickname(),
+                'karma' => HistoryService::$_karma,
+                'image' => $user->getWebPath(),
+                'isGoodVote' => HistoryService::$_isGoodVote
+
+            );
+
+        }
+        $sortedUsersListData = SortService::sortByKarma($usersListData);
+        return $this->render('homePage/topUsersList.html.twig',
+            array(
+                'usersList' => $sortedUsersListData,
+                'authUserId' => $authUserId
+            )
+        );
+    }
 }

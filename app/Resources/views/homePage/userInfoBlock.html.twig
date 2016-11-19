@@ -10,7 +10,7 @@
         </a>
         <a href="/profile" class="list-group-item">
             <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname }}
-            <span class="jsKarmaBlock badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
+            <span class="badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
         </a>
         <a href="/logout" id="logOut" class="list-group-item list-group-item-danger">
             <i class="fa fa-sign-out" aria-hidden="true"></i>

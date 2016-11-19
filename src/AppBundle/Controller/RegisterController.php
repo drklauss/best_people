@@ -19,29 +19,103 @@ use Symfony\Component\Validator\ConstraintViolationList;
 class RegisterController extends BaseController
 {
 
+
     /**
      * @Route("/register/user")
      * @return JsonResponse
      */
     public function registerUser()
     {
-        $user = $this->createFromRequest();
-        if ($this->validateUser($user)) {
+        $user = $this->createRegisterUserFromRequest();
+        if ($this->validateRegisterUser($user)) {
             // saves user
             $user->setPassword($this->saltPassword($user->getPassword()));
             $this->save($user);
             // set data to session
-            $sessionService = new SessionService();
-            $sessionService->setUserData($user);
+            $this->_sessionService->setUserData($user);
         };
         return $this->getErrorsJsonResult();
+    }
+
+    /**
+     * @Route("/edit/user")
+     * @return JsonResponse
+     */
+    public function editUser()
+    {
+        $user = $this->createEditUserFromRequest();
+        if ($this->validateEditUser($user)) {
+            // saves user
+            $user->setPassword($this->saltPassword($user->getPassword()));
+            $this->save($user);
+            // set data to session
+            $this->_sessionService->setUserData($user);
+        };
+        return $this->getErrorsJsonResult();
+    }
+
+    /**
+     * Generate new User fields
+     * @return array
+     */
+    private function createEditUserFromRequest()
+    {
+        $user = array();
+        $request = Request::createFromGlobals();
+        $post = $request->request;
+        $user['password'] = $post->get('password');
+        $user['newPassword'] = $post->get('newPassword');
+        $user['confirmNewPassword'] = $post->get('confirmNewPassword');
+        $user['image'] = $request->files->get('avatar');
+        return $user;
+
+    }
+
+    /**
+     * Validate a user
+     * @param array $user
+     * @return bool
+     */
+    private function validateEditUser(array $user)
+    {
+//        dump($user);
+//        exit;
+        $validator = $this->get('validator');
+        $validateErrors = array();
+        $wrongPass = true;
+        /**
+         * @var ConstraintViolationList $validateErrors
+         * @var Users $loggedUser
+         */
+        $userId = $this->_sessionService->getUserId();
+        $loggedUser = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
+        if ($this->saltPassword($user['password']) == $loggedUser->getPassword()) {
+            $wrongPass = true;
+            if (!empty($user['newPassword']) && $user['confirmPassword']) {
+                if ($user['newPassword'] !== $user['confirmPassword']) {
+                    $this->addError('New Password and Confirm Password do not match!');
+                } else {
+                    $loggedUser->setPassword($this->saltPassword($user['newPassword']));
+                }
+            }
+            $loggedUser->setImage($user['image']);
+            $validateErrors = $validator->validate($user);
+            foreach ($validateErrors as $error) {
+                $this->addError($error->getMessage());
+            }
+
+        } else {
+            $this->addError('Is that really you? Wrong password!');
+        }
+        $isError = (!$validateErrors) ? $wrongPass : count($validateErrors) > 0;
+        return !$isError;
     }
 
     /**
      * Create new User Entity
      * @return Users
      */
-    private function createFromRequest()
+    private function createRegisterUserFromRequest()
     {
         $request = Request::createFromGlobals();
         $post = $request->request;
@@ -57,12 +131,13 @@ class RegisterController extends BaseController
 
     }
 
+
     /**
      * Validate a user
      * @param Users $user
      * @return bool
      */
-    private function validateUser(Users $user)
+    private function validateRegisterUser(Users $user)
     {
         $validator = $this->get('validator');
         /**

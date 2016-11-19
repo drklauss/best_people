@@ -84,3 +84,12 @@ if (typeof(loginPage) !== 'undefined') {
         }
     );
 }
+if (typeof(profilePage) !== 'undefined') {
+    requirejs([
+            'app/pages/profilePage'
+        ], function (profile) {
+            profile.init();
+            profile.sendForm();
+        }
+    );
+}
