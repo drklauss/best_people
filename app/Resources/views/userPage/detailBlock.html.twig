@@ -12,7 +12,7 @@
             {{ discoverUserData.nickname }}
             <div class="pull-right">
                 {% if sessionData.isLogin and discoverUserData.id == loginedUserInfo.id  %}
-                    <a href="/profile/{{ loginedUserInfo.id }}" class="edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="/profile" class="edit-link"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 {% endif %}
             </div>
         </h3>

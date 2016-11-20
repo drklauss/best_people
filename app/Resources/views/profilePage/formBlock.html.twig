@@ -1,7 +1,4 @@
 <div class="panel panel-primary">
-    {#<div class="panel-heading">#}
-    {#<h2 class="text-center">Register new user</h2>#}
-    {#</div>#}
     <div class="panel-body">
         <div id="jsRegisterFormErrors" class="alert alert-danger hidden" role="alert">
             <ul></ul>
@@ -14,7 +11,7 @@
                                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                                 </span>
                     <input type="text" id="jsNameInput" name="nickname" class="form-control"
-                           value="{{ sessionData.userData.nickname }}" aria-describedby="username" disabled>
+                           value="{{ sessionData.userData.nickname }}" aria-describedby="username">
                 </div>
             </div>
 
@@ -33,7 +30,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Select gender*</label>
+                <label>Your gender</label>
                 <div class="input-group">
                     <div class="row">
                         <div class="col-sm-3">
@@ -49,9 +46,25 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="jsPasswordInput">Enter your current password*:</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-key" aria-hidden="true"></i>
+                    </span>
+                    <input type="password" name="currentPassword" class="form-control"
+                           placeholder="ex. ivan1" aria-describedby="password" required>
+                    <span class="input-group-addon">
+                        <input class="disclose-password" type="checkbox" data-toggle="tooltip"
+                               data-placement="top"
+                               title="Disclose password">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
                 <strong>
                     If you want to change password click
-                    <a data-toggle="collapse" href="#collapsePasswords" aria-expanded="false" aria-controls="collapsePasswords">
+                    <a data-toggle="collapse" href="#collapsePasswords" aria-expanded="false"
+                       aria-controls="collapsePasswords">
                         here
                     </a>
                 </strong>
@@ -59,32 +72,17 @@
 
             <div class="collapse" id="collapsePasswords">
                 <div class="form-group">
-                    <label for="jsPasswordInput">Enter your current password*:</label>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="fa fa-key" aria-hidden="true"></i>
-                        </span>
-                        <input type="password" id="jsPasswordInput" name="password" class="form-control"
-                               placeholder="ex. ivan1" aria-describedby="password" required>
-                        <span class="input-group-addon">
-                            <input id="jsDisclosePassword" type="checkbox" data-toggle="tooltip"
-                                   data-placement="top"
-                                   title="Disclose password">
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="jsPasswordInput">Enter your new password*:</label>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="fa fa-key" aria-hidden="true"></i>
                         </span>
-                        <input type="password" id="jsPasswordInput" name="password" class="form-control"
+                        <input type="password" name="newPassword" class="form-control change-password"
                                placeholder="ex. ivan1" aria-describedby="password" required>
                         <span class="input-group-addon">
-                            <input id="jsDisclosePassword" type="checkbox" data-toggle="tooltip"
-                                data-placement="top"
-                                title="Disclose password">
+                            <input class="disclose-password" type="checkbox" data-toggle="tooltip"
+                                   data-placement="top"
+                                   title="Disclose password">
                         </span>
                     </div>
                 </div>
@@ -94,10 +92,10 @@
                         <span class="input-group-addon">
                             <i class="fa fa-key" aria-hidden="true"></i>
                         </span>
-                        <input type="password" id="jsPasswordInput" name="password" class="form-control"
-                               placeholder="ex. ivan1" aria-describedby="password" required>
+                        <input type="password" name="confirmNewPassword" class="form-control change-password"
+                                aria-describedby="password" required>
                         <span class="input-group-addon">
-                            <input id="jsDisclosePassword" type="checkbox" data-toggle="tooltip"
+                            <input class="disclose-password" type="checkbox" data-toggle="tooltip"
                                    data-placement="top"
                                    title="Disclose password">
                         </span>
@@ -111,7 +109,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-4 pull-right">
-                    <button type="submit" id="jsRegisterBtn" class="btn btn-primary">Register</button>
+                    <button type="submit" id="jsRegisterBtn" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </form>

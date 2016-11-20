@@ -1,4 +1,7 @@
-define(['jquery', 'bootstrap'], function () {
+define(function (require) {
+    var $ = require('jquery');
+    require('bootstrap');
+
     var formIsValid = true;
     var $errorsBlock = $('#jsLoginFormErrors');
     var login = {
@@ -7,11 +10,12 @@ define(['jquery', 'bootstrap'], function () {
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover"}
             );
-            $('#jsDisclosePassword').on('click touchstart',function () {
+            // disclose password
+            $('.disclose-password').on('click touchstart', function () {
                 if ($(this).prop('checked')) {
-                    $('#jsPasswordInput').attr('type', 'text')
+                    $(this).parent().siblings('[type="password"]').attr('type', 'text');
                 } else {
-                    $('#jsPasswordInput').attr('type', 'password')
+                    $(this).parent().siblings('[type="text"]').attr('type', 'password');
                 }
             });
         },

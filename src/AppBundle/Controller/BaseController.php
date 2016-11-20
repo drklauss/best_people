@@ -64,18 +64,6 @@ class BaseController extends Controller
     }
 
     /**
-     * Get Json Response
-     * @param $data
-     * @return JsonResponse
-     */
-    protected function getJsonResult($data)
-    {
-        $response = new JsonResponse();
-        $response->setData($data);
-        return $response;
-    }
-
-    /**
      * Get Errors Json Response
      * @return JsonResponse
      */
@@ -85,6 +73,14 @@ class BaseController extends Controller
         $response = new JsonResponse();
         $response->setData($this->_errors);
         return $response;
+    }
+
+    /**
+     * Return hasError result
+     * @return bool
+     */
+    protected function hasErrors(){
+        return $this->_errors['isError'] ? true : false;
     }
 
     /**

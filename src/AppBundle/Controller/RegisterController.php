@@ -19,6 +19,17 @@ use Symfony\Component\Validator\ConstraintViolationList;
 class RegisterController extends BaseController
 {
 
+    /**
+     * Need to prevent double doctrine call during user edit action
+     * @var Users $_loggedUser
+     */
+    private $_loggedUser;
+
+
+    /**
+     * @var bool
+     */
+    private $_saveNewPassword = false;
 
     /**
      * @Route("/register/user")
@@ -45,11 +56,14 @@ class RegisterController extends BaseController
     {
         $user = $this->createEditUserFromRequest();
         if ($this->validateEditUser($user)) {
+            // check if need to save new password
+            if ($this->_saveNewPassword) {
+                $this->_loggedUser->setPassword($this->saltPassword($user['newPassword']));
+            }
             // saves user
-            $user->setPassword($this->saltPassword($user->getPassword()));
-            $this->save($user);
+            $this->save($this->_loggedUser);
             // set data to session
-            $this->_sessionService->setUserData($user);
+            $this->_sessionService->setUserData($this->_loggedUser);
         };
         return $this->getErrorsJsonResult();
     }
@@ -63,7 +77,8 @@ class RegisterController extends BaseController
         $user = array();
         $request = Request::createFromGlobals();
         $post = $request->request;
-        $user['password'] = $post->get('password');
+        $user['nickname'] = $post->get('nickname');
+        $user['currentPassword'] = $post->get('currentPassword');
         $user['newPassword'] = $post->get('newPassword');
         $user['confirmNewPassword'] = $post->get('confirmNewPassword');
         $user['image'] = $request->files->get('avatar');
@@ -78,44 +93,56 @@ class RegisterController extends BaseController
      */
     private function validateEditUser(array $user)
     {
-//        dump($user);
-//        exit;
         $validator = $this->get('validator');
-        $validateErrors = array();
-        $wrongPass = true;
         /**
          * @var ConstraintViolationList $validateErrors
-         * @var Users $loggedUser
          */
-        $userId = $this->_sessionService->getUserId();
-        $loggedUser = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
-        if ($this->saltPassword($user['password']) == $loggedUser->getPassword()) {
-            $wrongPass = true;
-            if (!empty($user['newPassword']) && $user['confirmPassword']) {
-                if ($user['newPassword'] !== $user['confirmPassword']) {
-                    $this->addError('New Password and Confirm Password do not match!');
-                } else {
-                    $loggedUser->setPassword($this->saltPassword($user['newPassword']));
-                }
-            }
-            $loggedUser->setImage($user['image']);
-            $validateErrors = $validator->validate($user);
-            foreach ($validateErrors as $error) {
-                $this->addError($error->getMessage());
-            }
-
-        } else {
-            $this->addError('Is that really you? Wrong password!');
+        $loggedUserId = $this->_sessionService->getUserId();
+        $this->_loggedUser = $this->getDoctrine()->getRepository('AppBundle:Users')->find($loggedUserId);
+        if ($this->saltPassword($user['currentPassword']) !== $this->_loggedUser->getPassword()) {
+            $this->addError('Wrong current password');
         }
-        $isError = (!$validateErrors) ? $wrongPass : count($validateErrors) > 0;
-        return !$isError;
+        if (!empty($user['newPassword']) && !empty($user['confirmNewPassword'])) {
+            if ($user['newPassword'] === $user['confirmNewPassword']) {
+                $this->_saveNewPassword = true;
+                $this->_loggedUser->setPassword($user['newPassword']);
+            } else {
+                $this->addError('New password does not match confirm password');
+            }
+        }
+
+
+        $this->_loggedUser->setNickname($user['nickname']);
+        $this->_loggedUser->setImage($user['image']);
+        $validateErrors = $validator->validate($this->_loggedUser);
+        foreach ($validateErrors as $error) {
+            $this->addError($error->getMessage());
+        }
+        return !$this->hasErrors();
+    }
+
+    /**
+     * Check passwords matching
+     * @param $user
+     * @return bool
+     */
+    private function isMatchPasswords($user)
+    {
+        $flag = false;
+        if (!empty($user['newPassword']) && !empty($user['confirmNewPassword'])) {
+            dump('here');
+            exit;
+            $flag = $user['newPassword'] === $user['confirmNewPassword'] ? true : false;
+        }
+        return $flag;
     }
 
     /**
      * Create new User Entity
      * @return Users
      */
-    private function createRegisterUserFromRequest()
+    private
+    function createRegisterUserFromRequest()
     {
         $request = Request::createFromGlobals();
         $post = $request->request;
@@ -125,7 +152,7 @@ class RegisterController extends BaseController
         $image = $request->files->get('avatar');
         $user->setImage($image);
         $this->_captcha = $post->get('g-recaptcha-response');
-        $isFemale = ($post->get('isFemale') === 'true') ? 1 : 0;
+        $isFemale = ($post->get('isFemale') === 'true') ? true : false;
         $user->setIsFemale($isFemale);
         return $user;
 
@@ -137,7 +164,8 @@ class RegisterController extends BaseController
      * @param Users $user
      * @return bool
      */
-    private function validateRegisterUser(Users $user)
+    private
+    function validateRegisterUser(Users $user)
     {
         $validator = $this->get('validator');
         /**
@@ -145,22 +173,19 @@ class RegisterController extends BaseController
          */
         $validateErrors = $validator->validate($user);
         $usersRepository = $this->getDoctrine()->getRepository('AppBundle:Users');
-        $isBadCaptcha = !$this->isGoodCaptcha($this->_captcha);
         $userExist = $usersRepository->findOneBy(
             array('nickname' => $user->getNickname())
         );
         if ($userExist) {
             $this->addError('This user already exist. Try another nickname!');
         }
-        if ($isBadCaptcha) {
+        if (!$this->isGoodCaptcha($this->_captcha)) {
             $this->addError('Oooh, seems your captcha wrong, are you a robot?');
         }
         foreach ($validateErrors as $error) {
             $this->addError($error->getMessage());
         }
-
-        $isError = (count($validateErrors) > 0) || $userExist || $isBadCaptcha;
-        return !$isError;
+        return !$this->hasErrors();
     }
 
 }

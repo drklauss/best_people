@@ -1,19 +1,26 @@
-define(['jquery', 'bootstrap'], function () {
+define(function (require) {
+    var $ = require('jquery');
+    require('bootstrap');
+
+
     var formIsValid = true;
     var $errorsBlock = $('#jsRegisterFormErrors');
+
+
     var profile = {
         init: function () {
 
             $('[data-toggle="tooltip"]').tooltip(
                 {"trigger": "hover"}
             );
-            $('#jsDisclosePassword').click(function () {
+            $('.disclose-password').on('click touchstart', function () {
                 if ($(this).prop('checked')) {
-                    $('#jsPasswordInput').attr('type', 'text')
+                    $(this).parent().siblings('[type="password"]').attr('type', 'text');
                 } else {
-                    $('#jsPasswordInput').attr('type', 'password')
+                    $(this).parent().siblings('[type="text"]').attr('type', 'password');
                 }
             });
+
             // imitate clicking on file button
             $('#jsFileInputTrigger').on('click touchstart', function (event) {
                 event.preventDefault();
@@ -29,6 +36,7 @@ define(['jquery', 'bootstrap'], function () {
          * Send Form
          */
         sendForm: function () {
+
             var registerBtn = $('#jsRegisterBtn');
             registerBtn.click(function (event) {
                 event.preventDefault();
@@ -48,15 +56,15 @@ define(['jquery', 'bootstrap'], function () {
 
                             if (result['isError'] == false) {
                                 swal({
-                                    title: 'Account created!',
-                                    text: 'Now you will be redirected to your profile',
+                                    title: 'Saved',
+                                    text: 'Profile data were successfully updated!',
                                     showConfirmButton: false,
                                     type: 'success',
                                     timer: swalWaitTime
 
                                 });
                                 setTimeout(function () {
-                                    location.href = '/profile';
+                                    location.reload();
                                 }, swalWaitTime);
                             } else {
                                 profile.addFormErrors(result['errors']);
@@ -93,11 +101,19 @@ define(['jquery', 'bootstrap'], function () {
          */
         validateForm: function ($form) {
             var inputsAreValid = true;
-            $form.find('input:required').each(function () {
-                if (!$(this).val().length) {
-                    inputsAreValid = false;
-                }
-            });
+            if($('#collapsePasswords').hasClass('collapse in')){
+                $form.find('input:required').each(function () {
+                    if (!$(this).val().length) {
+                        inputsAreValid = false;
+                    }
+                });
+            } else {
+                $form.find('input:required').each(function () {
+                    if (!$(this).val().length && !$(this).hasClass('change-password')) {
+                        inputsAreValid = false;
+                    }
+                });
+            }
 
             formIsValid = inputsAreValid;
         },

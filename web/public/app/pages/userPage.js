@@ -1,6 +1,7 @@
-define(['jquery', 'editor'], function ($, MediumEditor) {
-    var flagExit = true;
-    var swalWaitTime = 1500;
+define(function (require) {
+    var $ = require('jquery');
+    var MediumEditor = require('editor');
+
     var editorConfig = {
         toolbar: {
             /* These are the default options for the toolbar,

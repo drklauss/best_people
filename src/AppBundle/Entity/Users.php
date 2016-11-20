@@ -63,7 +63,7 @@ class Users
      * @var string
      *
      * @ORM\Column(name="isFemale", type="boolean")
-     * @Assert\NotBlank()
+     * @Assert\Type("bool")
      */
     private $isFemale;
 
@@ -127,12 +127,12 @@ class Users
     {
         $this->image = $image;
         // check if we have an old image path
-        if (isset($this->path)) {
+        if (isset($this->avatarLink)) {
             // store the old name to delete after the update
-            $this->temp = $this->path;
-            $this->path = null;
+            $this->temp = $this->avatarLink;
+            $this->avatarLink = null;
         } else {
-            $this->path = 'initial';
+            $this->avatarLink = 'initial';
         }
     }
 
@@ -172,6 +172,7 @@ class Users
      */
     public function removeUpload()
     {
+        $this->avatarLink = null;
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }

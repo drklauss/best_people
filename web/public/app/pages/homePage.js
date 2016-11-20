@@ -1,7 +1,10 @@
-define(['jquery', 'bootstrap'], function () {
+define(function (require) {
+    var $ = require('jquery');
+    require('bootstrap');
+
     var home = {
         getTopListUrl: '/get_top_list',
-        loaderDelay: 1000,
+        loaderDelay: 500,
         init: function () {
             setTimeout(home.reloadUsersList, home.loaderDelay);
 

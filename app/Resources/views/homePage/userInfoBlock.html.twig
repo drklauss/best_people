@@ -8,8 +8,8 @@
         <a href="/" class="list-group-item">
             <i class="fa fa-home" aria-hidden="true"></i> Home
         </a>
-        <a href="/profile" class="list-group-item">
-            <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname }}
+        <a href="/profile" title="{{ sessionData.userData.nickname }}" class="list-group-item">
+            <i class="fa fa-user fa-fw"></i> Hi, {{ sessionData.userData.nickname|truncate(10) }}
             <span class="badge {% if badgeClass is defined %}{{ badgeClass }}{% endif %}">{{ sessionData.userData.karma }}</span>
         </a>
         <a href="/logout" id="logOut" class="list-group-item list-group-item-danger">

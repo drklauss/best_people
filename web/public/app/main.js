@@ -29,7 +29,7 @@ requirejs.config({
         editor: "vendor/medium-editor/js/medium-editor.min"
     },
     baseUrl: commonPath,
-    urlArgs: 'v=0.12'
+    urlArgs: 'v=0.13'
 });
 
 requirejs([
