@@ -111,7 +111,6 @@ class RegisterController extends BaseController
             }
         }
 
-
         $this->_loggedUser->setNickname($user['nickname']);
         $this->_loggedUser->setImage($user['image']);
         $validateErrors = $validator->validate($this->_loggedUser);
@@ -122,27 +121,10 @@ class RegisterController extends BaseController
     }
 
     /**
-     * Check passwords matching
-     * @param $user
-     * @return bool
-     */
-    private function isMatchPasswords($user)
-    {
-        $flag = false;
-        if (!empty($user['newPassword']) && !empty($user['confirmNewPassword'])) {
-            dump('here');
-            exit;
-            $flag = $user['newPassword'] === $user['confirmNewPassword'] ? true : false;
-        }
-        return $flag;
-    }
-
-    /**
      * Create new User Entity
      * @return Users
      */
-    private
-    function createRegisterUserFromRequest()
+    private function createRegisterUserFromRequest()
     {
         $request = Request::createFromGlobals();
         $post = $request->request;
@@ -164,8 +146,7 @@ class RegisterController extends BaseController
      * @param Users $user
      * @return bool
      */
-    private
-    function validateRegisterUser(Users $user)
+    private function validateRegisterUser(Users $user)
     {
         $validator = $this->get('validator');
         /**

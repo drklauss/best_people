@@ -6,6 +6,7 @@ use AppBundle\Entity\Users;
 use AppBundle\Utils\HistoryService;
 use AppBundle\Utils\SessionService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,32 +57,27 @@ class RenderPagesController extends BaseController
 
     /**
      * @Route("/user/{userId}", name="personalPage", requirements={"userId": "\d+"})
-     * @param int $userId
+     * @ParamConverter("user", options={"id" = "userId"})
+     * @param Users $user
      * @return Response
      */
-    public function renderPersonalPageAction($userId)
+    public function renderPersonalPageAction(Users $user)
     {
-        $user = $this->getDoctrine()->getRepository('AppBundle:Users')->find($userId);
         $hasUser = false;
         $sessionData = $this->getSessionServiceData();
         $authUserId = $sessionData['userData']['id'];
-        $userData = array();
-        if ($user) {
-            $hasUser = true;
-            HistoryService::setVotesHistory($user, $authUserId);
-            HistoryService::setMessagesHistory($user);
-            $userData = array(
-                'id' => $user->getId(),
-                'nickname' => $user->getNickname(),
-                'karma' => HistoryService::$_karma,
-                'image' => $user->getWebPath(),
-                'isGoodVote' => HistoryService::$_isGoodVote
+        HistoryService::setVotesHistory($user, $authUserId);
+        HistoryService::setMessagesHistory($user);
+        $userData = array(
+            'id' => $user->getId(),
+            'nickname' => $user->getNickname(),
+            'karma' => HistoryService::$_karma,
+            'image' => $user->getWebPath(),
+            'isGoodVote' => HistoryService::$_isGoodVote
 
-            );
-        }
+        );
         return $this->render('userPage/user.html.twig',
             array(
-                'hasUser' => $hasUser,
                 'sessionData' => $sessionData,
                 'discoverUserData' => $userData,
                 'votesHistory' => HistoryService::$_votesHistory,
